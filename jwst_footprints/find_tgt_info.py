@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 import sys
-import string
 import math
 from . import ephemeris_old2x as EPH
 
@@ -14,7 +13,7 @@ def unit_limit(x): return min(max(-1., x), 1.)  # forces value to be in [-1,1]
 
 
 def convert_ddmmss_to_float(astring):
-    aline = string.split(astring, ':')
+    aline = aline.split(astring, ':')
     d = float(aline[0])
     m = float(aline[1])
     s = float(aline[2])
