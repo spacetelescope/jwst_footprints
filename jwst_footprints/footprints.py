@@ -22,6 +22,7 @@ import numpy as np
 from astropy import wcs
 from astropy.io import fits
 from astropy.io import ascii
+from . import DATADIR
 
 
 def arcsec2deg(ra, dec, v2arcsec, v3arcsec, xr, yr):
@@ -222,7 +223,7 @@ def rotate_short(x2, x3, theta):
 #------------------------------
 
 
-def create_footprint(input, ra, dec, napertures, footprintname, color):
+def create_footprint(inputfile, ra, dec, napertures, footprintname, color):
     global w
     # input
 
@@ -277,7 +278,7 @@ def create_footprint(input, ra, dec, napertures, footprintname, color):
 
 
 #------------------------------
-def create_footprint_center(input, ra, dec, footprintname, color):
+def create_footprint_center(inputfile, ra, dec, footprintname, color):
     global w
     # input
 
@@ -311,9 +312,17 @@ def create_footprint_center(input, ra, dec, footprintname, color):
     file.close()
 
 #------------------------------
+def read_table(inputfile, delim=' '):
+    records = []
+    with open(inputfile, 'r') as fp:
+        for row in fp:
+            cols = [ x for x in row.strip().split(delim) if x ]
+            records.append(cols)
+
+    return list(zip(*records))
 
 
-def footprints(input,
+def footprints(inputfile,
                sourcelist,
                plot_long='no',
                plot_short='no',
@@ -350,7 +359,7 @@ def footprints(input,
 
     # read image and its header
     # need to extend this to multi extension fits files
-    hdulist = fits.open(input)
+    hdulist = fits.open(inputfile)
     w = wcs.WCS(hdulist[0].header)
     print(w)
     # verify that wcs is working
@@ -489,8 +498,7 @@ def footprints(input,
     # nirspec msa
     if plot_msa == 'yes':
         print('processing NIRSPEC MSA')
-        v2msa, v3msa, aper, v2ref, v3ref = np.loadtxt(
-            'table-nirspec-msa.txt', unpack=True, skiprows=0, dtype='str')
+        v2msa, v3msa, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nirspec-msa.txt'))
         v2msa = np.array(v2msa, np.float_)
         v3msa = np.array(v3msa, np.float_)
 
@@ -550,13 +558,12 @@ def footprints(input,
         print('processing NIRCAM LWC')
 
         create_footprint_center(
-            input,
+            inputfile,
             ra_long,
             dec_long,
             'ds9-long-centre.reg',
             collong)
-        v2c, v3c, aper, v2ref, v3ref = np.loadtxt(
-            'table-nircam-long.txt', unpack=True, skiprows=0, dtype='str')
+        v2c, v3c, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nircam-long.txt'))
         v2_0 = np.array(v2c, np.float_)
         v3_0 = np.array(v3c, np.float_)
 
@@ -589,7 +596,7 @@ def footprints(input,
                 myv3 = np.append(myv3, a[1])
             myv2 = np.array(myv2)
             myv3 = np.array(myv3)
-            create_footprint(input, myv2, myv3, 2, 'ds9-long-no.reg', collong)
+            create_footprint(inputfile, myv2, myv3, 2, 'ds9-long-no.reg', collong)
 
         if dither_pattern_long == 'three' and mosaic == 'no':
             shiftv2 = [0.0, -58.0, 58.0]
@@ -621,7 +628,7 @@ def footprints(input,
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 6,
@@ -658,7 +665,7 @@ def footprints(input,
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 6,
@@ -701,7 +708,7 @@ def footprints(input,
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 12,
@@ -774,7 +781,7 @@ def footprints(input,
                     'three' or dither_pattern_long == 'threetight'):
                 napertures = 12
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 napertures,
@@ -788,14 +795,13 @@ def footprints(input,
         print(plot_short)
         print('processing NIRCAM SWC')
         create_footprint_center(
-            input,
+            inputfile,
             ra_short,
             dec_short,
             'ds9-short-centre.reg',
             colshort)
 
-        v2sh, v3sh, aper, v2ref, v3ref = np.loadtxt(
-            'table-nircam-short.txt', unpack=True, skiprows=0, dtype='str')
+        v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nircam-short.txt'))
         v2sh = np.array(v2sh, np.float_)
         v3sh = np.array(v3sh, np.float_)
 
@@ -842,7 +848,7 @@ def footprints(input,
             myv3 = np.array(myv3)
             print(myv2)
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 8,
@@ -892,7 +898,7 @@ def footprints(input,
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 24,
@@ -942,7 +948,7 @@ def footprints(input,
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 24,
@@ -954,8 +960,7 @@ def footprints(input,
             shiftv3 = [-30.0, -18.0, -6.0, 6.0, 18.0, 30.0]
 
             # determine center of rotation using info from long dither pattern
-            v2sh, v3sh, aper, v2ref, v3ref = np.loadtxt(
-                'table-nircam-long.txt', unpack=True, skiprows=0, dtype='str')
+            v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nircam-long.txt'))
             v2sh = np.array(v2sh, np.float_)
             v3sh = np.array(v3sh, np.float_)
 
@@ -970,8 +975,7 @@ def footprints(input,
             xr = ((xa + xb) / 2.)
             yr = ((ya + yb) / 2.)
 
-            v2sh, v3sh, aper, v2ref, v3ref = np.loadtxt(
-                'table-nircam-short.txt', unpack=True, skiprows=0, dtype='str')
+            v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nircam-short.txt'))
             v2sh = np.array(v2sh, np.float_)
             v3sh = np.array(v3sh, np.float_)
 
@@ -996,7 +1000,7 @@ def footprints(input,
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 48,
@@ -1075,7 +1079,7 @@ def footprints(input,
                     'three' or dither_pattern_short == 'threetight'):
                 napertures = 48
             create_footprint(
-                input,
+                inputfile,
                 myv2,
                 myv3,
                 napertures,
@@ -1090,7 +1094,7 @@ def footprints(input,
     d.set('cmap ' + ds9cmap)
     d.set('scale limits ' + ds9limmin + ' ' + ds9limmax)
     d.set('scale ' + ds9scale)
-    d.set('file ' + input)
+    d.set('file ' + inputfile)
     # iraf.images()
     # iraf.tv()
 

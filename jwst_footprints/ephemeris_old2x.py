@@ -3,15 +3,15 @@
 
 import sys
 import time
-import time_extensionsx as time2
-from math import asin, atan2, cos, sin
-from .rotationsx import *
-from .quaternionx import *
+from math import asin, atan2, cos, sin, pi
+
 from . import astro_funcx as astro_func
+from . import quaternionx
+from . import rotationsx
 
 D2R = pi / 180.  # degrees to radians
 R2D = 180. / pi  # radians to degrees
-PI2 = 2. * pi   # 2 pi
+PI2 = 2. * pi  # 2 pi
 
 
 def unit_limit(x): return min(max(-1., x), 1.)  # forces value to be in [-1,1]
@@ -24,7 +24,7 @@ SUN_ANGLE_PAD = 0.5 * D2R
 
 obliquity_of_the_ecliptic = -23.439291  # At J2000 equinox
 obliquity_of_the_ecliptic *= D2R
-Qecl2eci = QX(obliquity_of_the_ecliptic)
+Qecl2eci = quaternionx.QX(obliquity_of_the_ecliptic)
 
 
 class Ephemeris:
@@ -40,7 +40,7 @@ class Ephemeris:
         self.zlist = []
         self.amin = 0.
         self.amax = 0.
-        aV = Vector(0., 0., 0.)
+        aV = rotationsx.Vector(0., 0., 0.)
         fin = file(afile, 'r').readlines()
         if "l2_halo_FDF_060619.trh" in afile:
             ascale = 0.001
@@ -156,7 +156,7 @@ class Ephemeris:
         x = (self.xlist[indx + 1] - self.xlist[indx]) * frac + self.xlist[indx]
         y = (self.ylist[indx + 1] - self.ylist[indx]) * frac + self.ylist[indx]
         z = (self.zlist[indx + 1] - self.zlist[indx]) * frac + self.zlist[indx]
-        return Vector(x, y, z)
+        return rotationsx.Vector(x, y, z)
         # alower = float(int(adate - 0.5)) + 0.5
         # if alower>= self.amin and adate>= self.amin and adate<=self.amax:
         #     x = spline_interp(adate,self.datelist,self.xlist)
@@ -176,10 +176,10 @@ class Ephemeris:
     def sun_pos(self, adate):
         Vsun = -1. * self.pos(adate)
         Vsun = Vsun / Vsun.length()
-        coord2 = asin(unit_limit(Vsun.z))
+        coord2 = asin(quaternionx.unit_limit(Vsun.z))
         coord1 = atan2(Vsun.y, Vsun.x)
         if coord1 < 0.:
-            coord1 += PI2
+            coord1 += quaternionx.PI2
         return (coord1, coord2)
 
     def normal_pa(self, adate, tgt_c1, tgt_c2):
@@ -187,9 +187,9 @@ class Ephemeris:
         sun_pa = astro_func.pa(tgt_c1, tgt_c2, sun_c1, sun_c2)
         V3_pa = sun_pa + pi  # We want -V3 pointed towards sun.
         if V3_pa < 0.:
-            V3_pa += PI2
-        if V3_pa >= PI2:
-            V3_pa -= PI2
+            V3_pa += quaternionx.PI2
+        if V3_pa >= quaternionx.PI2:
+            V3_pa -= quaternionx.PI2
         return V3_pa
 
     def is_valid(self, date, coord_1, coord_2, V3pa):
@@ -209,9 +209,9 @@ class Ephemeris:
         pa = astro_func.pa(coord_1, coord_2, sun_1, sun_2) + pi
         roll = acos(cos(V3pa - pa))
         sun_roll = asin(sin(roll) * cos(vehicle_pitch))
-        if (abs(sun_roll) <= 5.2 * D2R):
+        if (abs(sun_roll) <= 5.2 * quaternionx.quaternionx.D2R):
             sun_pitch = atan2(tan(vehicle_pitch), cos(roll))
-            if (sun_pitch <= 5.0 * D2R and sun_pitch >= -44.8 * D2R):
+            if (sun_pitch <= 5.0 * quaternionx.quaternionx.D2R and sun_pitch >= -44.8 * quaternionx.quaternionx.D2R):
                 return True
         return False
 

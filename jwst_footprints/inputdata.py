@@ -3,7 +3,8 @@ plotnames = ['plot']
 # background fits file
 #
 fitsname = {
-    'plot': '/Users/lubeda/Desktop/version-1.0/mosaic_ngc5194_acs_f814w_sci.fits'}
+    'plot': '/Users/lubeda/Desktop/version-1.0/mosaic_ngc5194_acs_f814w_sci.fits'
+    }
 #
 # source catalog
 #

@@ -180,7 +180,7 @@ def rollangle(ra, dec):
                 print "%13s %13s %11s %13.5f %13.5f %13.5f %13.5f " % ('CVZ','CVZ','CVZ',360.,0.,ra*R2D,dec*R2D)
             else:
                 print "%13s %13s %11s %13.5f %13.5f %13.5f %13.5f " % ('CVZ','CVZ','CVZ',0.,360.,ra*R2D,dec*R2D)
-        '''
+    '''
     if 1 == 1:
         wstart = search_start
         wend = wstart + span
@@ -199,11 +199,11 @@ def rollangle(ra, dec):
 
         outputfile = 'nirspec_nircam.txt'
         file = open(outputfile, "w")
-    #    pos = 0
-    #    for i in range(0,napertures):
-    #           newline = 'polygon '+ str(x[pos])+ '  '+ str(y[pos])+ '  '+ str(x[pos+1])+ '  '+ str(y[pos+1])+ '  '+ str(x[pos+2])+ '  '+ str(y[pos+2])+ '  '+ str(x[pos+3])+ '  '+ str(y[pos+3])+ '  '+ str(x[pos+4])+ '  '+ str(y[pos+4])+ '  ' +  '# text={}'+'\n'
-    #           file.write(newline)
-    #           pos = pos + 5
+        # pos = 0
+        # for i in range(0,napertures):
+        #        newline = 'polygon '+ str(x[pos])+ '  '+ str(y[pos])+ '  '+ str(x[pos+1])+ '  '+ str(y[pos+1])+ '  '+ str(x[pos+2])+ '  '+ str(y[pos+2])+ '  '+ str(x[pos+3])+ '  '+ str(y[pos+3])+ '  '+ str(x[pos+4])+ '  '+ str(y[pos+4])+ '  ' +  '# text={}'+'\n'
+        #        file.write(newline)
+        #        pos = pos + 5
 
         for itime in range(istart, iend):
             atime = float(itime)
@@ -221,16 +221,16 @@ def rollangle(ra, dec):
 
                 minV3PA = bound_angle(V3PA - max_boresight_roll)
                 maxV3PA = bound_angle(V3PA + max_boresight_roll)
-             #   minNIRCam_PA = bound_angle(V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
-             #   maxNIRCam_PA = bound_angle(V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
-             #   minNIRSpec_PA = bound_angle(V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
-             #   maxNIRSpec_PA = bound_angle(V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
-             #   minNIRISS_PA = bound_angle(V3PA - max_boresight_roll + NIS_V3IdlYang)
-             #   maxNIRISS_PA = bound_angle(V3PA - max_boresight_roll + NIS_V3IdlYang)
-             #   minMIRI_PA = bound_angle(V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
-             #   maxMIRI_PA = bound_angle(V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
-             #   minFGS_PA = bound_angle(V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
-             #   maxFGS_PA = bound_angle(V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
+                # minNIRCam_PA = bound_angle(V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
+                # maxNIRCam_PA = bound_angle(V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
+                # minNIRSpec_PA = bound_angle(V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
+                # maxNIRSpec_PA = bound_angle(V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
+                # minNIRISS_PA = bound_angle(V3PA - max_boresight_roll + NIS_V3IdlYang)
+                # maxNIRISS_PA = bound_angle(V3PA - max_boresight_roll + NIS_V3IdlYang)
+                # minMIRI_PA = bound_angle(V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
+                # maxMIRI_PA = bound_angle(V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
+                # minFGS_PA = bound_angle(V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
+                # maxFGS_PA = bound_angle(V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
 
                 minNIRCam_PA = bound_angle(
                     V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
