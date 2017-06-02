@@ -2,7 +2,8 @@ plotnames = ['plot']
 #
 # background fits file
 #
-fitsname = {'plot': '/Users/lubeda/Desktop/version-1.0/mosaic_ngc5194_acs_f814w_sci.fits'}
+fitsname = {
+    'plot': '/Users/lubeda/Desktop/version-1.0/mosaic_ngc5194_acs_f814w_sci.fits'}
 #
 # source catalog
 #
@@ -26,14 +27,14 @@ colorlong = {'plot': 'cyan'}
 # fiducial point equatorial coordinates
 # in degrees
 #
-ranircam = {'plot': '202.46959'}    #  RA  NIRCam
-decnircam = {'plot': '47.195187'}    #  Dec NIRCam
-thetanircam = {'plot': '0.0'}    #  APA NIRCam
-ranirspec = {'plot': '202.46959'}   #  RA  NIRSpec
-decnirspec = {'plot': '47.195187'}   #  Dec NIRSpec
-thetanirspec = {'plot': '0.0'}   #  APA NIRSpec
+ranircam = {'plot': '202.46959'}  # RA  NIRCam
+decnircam = {'plot': '47.195187'}  # Dec NIRCam
+thetanircam = {'plot': '0.0'}  # APA NIRCam
+ranirspec = {'plot': '202.46959'}  # RA  NIRSpec
+decnirspec = {'plot': '47.195187'}  # Dec NIRSpec
+thetanirspec = {'plot': '0.0'}  # APA NIRSpec
 #
-# nircam dither offsest 
+# nircam dither offsest
 # in arcsec
 #
 offh = {'plot': '10.0'}
