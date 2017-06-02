@@ -32,7 +32,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'jwst_footprints=jwst_footprints:main',
+            'jwst_footprints=jwst_footprints.launch_footprints:main',
         ],
     },
 )
