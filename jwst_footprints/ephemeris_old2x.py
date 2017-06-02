@@ -2,8 +2,8 @@
 # Module ephemeris.py
 
 import sys
-# import time
-# import time_extensionsx as time2
+import time
+import time_extensionsx as time2
 from math import asin, atan2, cos, sin
 from .rotationsx import *
 from .quaternionx import *
@@ -42,11 +42,11 @@ class Ephemeris:
         self.amax = 0.
         aV = Vector(0., 0., 0.)
         fin = file(afile, 'r').readlines()
-        if string.find(afile, "l2_halo_FDF_060619.trh") > -1:
+        if "l2_halo_FDF_060619.trh" in afile:
             ascale = 0.001
         else:
             ascale = 1.0
-        if string.find(afile, "horizons_EM_L2") > -1:
+        if "horizons_EM_L2" in afile:
             not_there = True
             istart = 0
             while fin[istart][:5] != "$$SOE":
@@ -64,8 +64,8 @@ class Ephemeris:
                 exit(-1)
 
             while fin[istart][:5] != "$$EOE":
-                item = string.strip(fin[istart])
-                item = string.split(item, ',')
+                item = item.strip(fin[istart])
+                item = item.split(',')
                 adate = float(item[0]) - 2400000.5  # represent dates as mjds
                 x = float(item[2]) * ascale
                 y = float(item[3]) * ascale
@@ -88,8 +88,8 @@ class Ephemeris:
                 istart += 1
         else:
             for item in fin[2:]:
-                item = string.strip(item)
-                item = string.split(item)
+                item = item.strip(item)
+                item = item.split(item)
                 adate = time2.mjd_from_string(
                     item[0])  # represent dates as mjds
                 x = float(item[1]) * ascale
