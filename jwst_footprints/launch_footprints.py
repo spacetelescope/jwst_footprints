@@ -2,24 +2,24 @@
 # encoding: utf-8
 
 
-from Tkinter import *
-import Tkinter as tk
-import Tkconstants, tkFileDialog
-from Tkinter import Tk
-from tkFileDialog import askopenfilename
+from tkinter import *
+import tkinter as tk
+import tkinter.constants, tkinter.filedialog
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
 
-import cStringIO
+import io
 import base64
 from PIL import Image, ImageTk
 import PIL.Image
-from footprints   import *
-from inputdata  import *
+from .footprints   import *
+from .inputdata  import *
 
 import shutil, sys, os
 
 from astropy.io import ascii
-from plot_timeline  import *
+from .plot_timeline  import *
 
 
 global catalogue
@@ -103,7 +103,7 @@ def readfitsfilename():
 
 def makefootprints():
     if ptVar.get() == 'footprints':
-        print catVar.get()
+        print(catVar.get())
         footprints(\
         fileVar.get(),\
         catVar.get(),\
@@ -133,7 +133,7 @@ def makefootprints():
 
 
 def maketimeline():
-        print ramsaVar.get()
+        print(ramsaVar.get())
         plottimeline(\
         float(ramsaVar.get()),\
         float(decmsaVar.get()),\

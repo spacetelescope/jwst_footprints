@@ -6,9 +6,9 @@ import sys
 #import time
 #import time_extensionsx as time2
 from math import *
-from rotationsx import *
-from quaternionx import *
-import astro_funcx as astro_func
+from .rotationsx import *
+from .quaternionx import *
+from . import astro_funcx as astro_func
 
 D2R = pi/180.  #degrees to radians
 R2D = 180. / pi #radians to degrees 
@@ -28,9 +28,9 @@ class Ephemeris:
     def __init__(self,afile,cnvrt=False):
         """Eph constructor, cnvrt True converts into Ecliptic frame """
         if cnvrt:
-            print "Using Ecliptic Coordinates"
+            print("Using Ecliptic Coordinates")
         else:
-            print "Using Equatorial Coordinates"
+            print("Using Equatorial Coordinates")
         self.datelist = []
         self.xlist = []
         self.ylist = []
@@ -51,11 +51,11 @@ class Ephemeris:
                     if fin[istart].find('Sun') > -1:
                         not_there = False
                     else:
-                        print fin[istart]
+                        print(fin[istart])
                 istart += 1
             istart += 1
             if not_there:
-                print "This ephemeris does not use the Sun as the center body.  It should not be used."
+                print("This ephemeris does not use the Sun as the center body.  It should not be used.")
                 exit(-1)
                 
             while fin[istart][:5] != "$$EOE":
@@ -123,11 +123,11 @@ class Ephemeris:
         
         if (pathname):
             dest = open(pathname, 'w')
-            print >>dest, ('#Generated %s\n' %(time.ctime()))
+            print(('#Generated %s\n' %(time.ctime())), file=dest)
         else:
             dest = sys.stdout  #defaults to standard output
             
-        print >>dest, ('%17s  %14s  %14s  %14s\n' %('DATE      ', 'X (KM)   ', 'Y (KM)   ', 'Z (KM)   '))
+        print(('%17s  %14s  %14s  %14s\n' %('DATE      ', 'X (KM)   ', 'Y (KM)   ', 'Z (KM)   ')), file=dest)
         
         for num in range(num_to_report):
             date = self.datelist[num]
@@ -135,7 +135,7 @@ class Ephemeris:
             y = self.ylist[num]
             z = self.zlist[num]
             
-            print >>dest, ('%17s  %14.3f  %14.3f  %14.3f' %(time2.display_date(date), x, y, z))
+            print(('%17s  %14.3f  %14.3f  %14.3f' %(time2.display_date(date), x, y, z)), file=dest)
             
         if (pathname):
             dest.close()   #Clean up

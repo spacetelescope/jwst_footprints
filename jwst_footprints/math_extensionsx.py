@@ -74,7 +74,7 @@ def variance (l):
     
     #Returns the sample variance (n-1 formula).
     mean = avg(l)
-    sumsq = sum(map(lambda(i): (i - mean)**2, l))
+    sumsq = sum([(i - mean)**2 for i in l])
     return(sumsq / float(len(l) - 1))
     
 def stdev (l):
@@ -267,7 +267,7 @@ class Histogram (object):
     def num_items (self):
         """Returns the total number of items stored in the histogram."""
         
-        return(sum(map(lambda bin: bin.count, self.bins)))
+        return(sum([bin.count for bin in self.bins]))
                 
     def __str__ (self):
         """Returns a printed representation of the histogram."""
@@ -314,7 +314,7 @@ class DiscreteHistogram (Histogram):
     def retrieve_values (self):
         """Returns the list of bin values of a discrete histogram."""
         
-        return(map(lambda bin: bin.bin_value, self.bins))
+        return([bin.bin_value for bin in self.bins])
         
     def retrieve_count_by_value (self, value):
         """Returns the count matching a certain value.  If not found, return None."""
@@ -399,7 +399,7 @@ class ContinuousHistogram (Histogram):
         """Returns the list of boundaries of a continuous histogram."""
         
         #Return upper limits of all bins except the last.
-        return(map(lambda bin: bin.max_value, self.bins[:-1]))
+        return([bin.max_value for bin in self.bins[:-1]])
             
     def store_items (self, value, count=1):
         """Stores a value in the continuous histogram.
@@ -436,7 +436,7 @@ def combine_histograms (histograms):
         new_histogram = DiscreteHistogram(histograms[0].retrieve_values())
     
     for bin_index in range(len(new_histogram.bins)):
-        total_items = sum(map(lambda hist: hist.bins[bin_index].count, histograms))
+        total_items = sum([hist.bins[bin_index].count for hist in histograms])
         new_histogram.bins[bin_index].store_items(total_items)
         
     return(new_histogram)
@@ -451,7 +451,7 @@ def average_histograms (histograms):
     new_histogram = copy.deepcopy(histograms[0])
     
     for bin_index in range(len(new_histogram.bins)):
-        new_histogram.bins[bin_index].count = avg(map(lambda hist: hist.bins[bin_index].count, histograms))
+        new_histogram.bins[bin_index].count = avg([hist.bins[bin_index].count for hist in histograms])
         
     return(new_histogram)
         
@@ -511,7 +511,7 @@ class PoissonDistribution (DiscreteHistogram):
     def retrieve_values (self):
         """Returns the list of bin values for the Poisson distribution."""
         
-        return(range(len(self.bins) - 1))   #leave out last bin
+        return(list(range(len(self.bins) - 1)))   #leave out last bin
         
     def retrieve_count_by_value (self, value):
         """Returns the number of items in the histogram that have the designated value.
@@ -532,7 +532,7 @@ class PoissonDistribution (DiscreteHistogram):
         
         value = integer (must be between 0 and the max_boundary of the distribution)."""
         
-        return(sum(map(lambda i: self.bins[i].count, range(value + 1))))
+        return(sum([self.bins[i].count for i in range(value + 1)]))
         
         
 class StatisticalList (list):
@@ -555,13 +555,13 @@ class StatisticalList (list):
         
         #Variance is defined as the sum of the squares of the differences between each data point and the mean,
         #divided by the number of degrees of freedom.  For now assume the list is a sample, so DOF = n-1.
-        return(sum(map(lambda n: (n - mean)**2, self)) / (len(self) - 1))
+        return(sum([(n - mean)**2 for n in self]) / (len(self) - 1))
         
     def compute_rms (self):
         """Computes the rms value of a statistical list."""
         
         #Simply sum the squares, divide by n, and take the square root.
-        return(sqrt(avg(map(lambda n: n**2, self))))
+        return(sqrt(avg([n**2 for n in self])))
         
     def compute_statistics (self, min_value = None, max_value=None, max_bins=None):
         """Computes statistics for a StatisticalList object; must contain at least one element.

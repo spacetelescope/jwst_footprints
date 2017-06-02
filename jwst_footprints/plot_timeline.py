@@ -8,7 +8,7 @@ from astropy.io import ascii
 from astropy.time import Time
 import numpy as np
 import datetime 
-from find_tgt_info import *
+from .find_tgt_info import *
 
 def plottimeline(ra_msa=202.47,\
                  dec_msa=47.2,\

@@ -4,8 +4,8 @@
 #import random
 import math
 from math import *
-import math_extensionsx as math2
-import quaternionx as quat
+from . import math_extensionsx as math2
+from . import quaternionx as quat
 
 class GalacticPole (object):
     """Represents coordinates of galactic pole."""
@@ -90,7 +90,7 @@ class Matrix (list):
     def column(self, col_index):
         """Returns a specified column of the matrix as a numeric list."""
         
-        return(NumericList(map(lambda row: row[col_index], self)))
+        return(NumericList([row[col_index] for row in self]))
         
     def num_rows(self):
         """Returns the number of rows in the matrix."""
@@ -105,7 +105,7 @@ class Matrix (list):
     def get_cols (self):
         """Returns list of all columns in a matrix."""
         
-        return (map(lambda col_index: self.column(col_index), range(0, self.num_cols())))
+        return ([self.column(col_index) for col_index in range(0, self.num_cols())])
 	     
     def __mul__(m1, m2):
 	"""Multiplies two Matrix objects and returns the resulting matrix.
@@ -236,7 +236,7 @@ class Vector (object):
        """Converts a Vector into a single-column matrix."""
        
        column = [self.x, self.y, self.z]
-       return(Matrix(map(lambda element: [element], column)))  #singleton list
+       return(Matrix([[element] for element in column]))  #singleton list
   
    #Recommend deletion -- better to use a single interface that takes two vectors.
    def dot(self,V2):
@@ -479,10 +479,10 @@ class CelestialVector (Vector):
             result = CelestialVector(ra, dec, degrees=False)
                      	
         elif (((new_frame == 'gal') and (self.frame == 'ec')) or ((new_frame == 'ec') and (self.frame == 'gal'))):
-        	print "Error: Direct conversion between ecliptic and galactic coordinates not supported yet"
+        	print("Error: Direct conversion between ecliptic and galactic coordinates not supported yet")
         	
         elif (new_frame != self.frame):
-        	print "Error: unrecognized coordinate frame."
+        	print("Error: unrecognized coordinate frame.")
 
         #If there was an error, return a copy of the initial vector.        	
         if (result is None):

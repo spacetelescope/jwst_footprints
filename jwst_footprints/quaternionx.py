@@ -25,8 +25,8 @@ Modified cnvrt method to return a CelestialVector."""
 
 from math import *
 import math
-from math_extensionsx import *
-import rotationsx as rot
+from .math_extensionsx import *
+from . import rotationsx as rot
 
 D2R = pi/180.
 R2D = 180. / pi

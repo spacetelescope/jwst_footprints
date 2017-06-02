@@ -3,7 +3,7 @@
 import sys
 import string
 import math
-import ephemeris_old2x as EPH
+from . import ephemeris_old2x as EPH
 
 D2R = math.pi / 180.  #degrees to radians
 R2D = 180. / math.pi #radians to degrees 
@@ -83,7 +83,7 @@ def rollangle(ra, dec):
         search_start = 58392.00000000  #Oct 1, 2018         LEONARDO
 
         if search_start < A_eph.amin:
-            print "Warning, search start time is earlier than ephemeris start."
+            print("Warning, search start time is earlier than ephemeris start.")
             search_start = A_eph.amin + 1
 
         scale = 10
@@ -170,8 +170,8 @@ def rollangle(ra, dec):
             tgt_is_in = False
             if iflag:
               tgt_is_in = True
-            print
-            print
+            print()
+            print()
             #print "             V3PA          NIRCam           NIRSpec         NIRISS           MIRI          FGS"
             #print "   MJD    min    max      min    max      min    max      min    max      min    max      min    max"
                   #58849.0 264.83 275.18 264.80 264.80  42.32  42.32 264.26 264.26 269.84 269.84 263.58 263.58
@@ -193,7 +193,7 @@ def rollangle(ra, dec):
                 #print atime,A_eph.in_FOR(atime,ra,dec)
                 if iflag:
                     if not tgt_is_in:
-                        print
+                        print()
                     tgt_is_in = True
                     
                     V3PA = A_eph.normal_pa(atime,ra,dec)*R2D
@@ -233,7 +233,7 @@ def rollangle(ra, dec):
 
                     #print '%7.1f %6.2f %6.2f %6.2f' % (atime, V3PA, NIRCam_PA, NIRSpec_PA)
                     fmt = '%7.1f' + '   %6.2f %6.2f'*6
-                    print  fmt % (atime,minV3PA,maxV3PA,minNIRCam_PA,maxNIRCam_PA,minNIRSpec_PA,maxNIRSpec_PA,minNIRISS_PA,maxNIRISS_PA,minMIRI_PA,maxMIRI_PA,minFGS_PA,maxFGS_PA)
+                    print(fmt % (atime,minV3PA,maxV3PA,minNIRCam_PA,maxNIRCam_PA,minNIRSpec_PA,maxNIRSpec_PA,minNIRISS_PA,maxNIRISS_PA,minMIRI_PA,maxMIRI_PA,minFGS_PA,maxFGS_PA))
                     newline = str(atime)+'  '+str(minNIRCam_PA)+'  '+str(maxNIRCam_PA)+'  '+str(minNIRSpec_PA)+'  '+str(maxNIRSpec_PA)+'  \n'
                     file.write(newline)
             

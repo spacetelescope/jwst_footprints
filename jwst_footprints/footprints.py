@@ -217,7 +217,7 @@ def create_footprint(input,ra,dec,napertures,footprintname,color):
       # napertures = number of apertures in footprint ( Nircam LONG = 2, NIRCam short = 8, MSA = 4)
       
       nrows = napertures*5 
-      print nrows
+      print(nrows)
       ra = np.array(ra,np.float_) # np.array(ra, np.float_)
       dec = np.array(dec,np.float_) #np.array(dec, np.float_)
       world= []
@@ -329,36 +329,36 @@ def footprints(input,\
     # need to extend this to multi extension fits files
     hdulist = fits.open(input)
     w = wcs.WCS(hdulist[0].header)
-    print w 
+    print(w) 
     # verify that wcs is working
     try:
         pixcrd2 = w.wcs_world2pix([(0.0,0.0)], 1)
 
     except ValueError:
-      print 'FITS file is not valid'
+      print('FITS file is not valid')
     else:
-      print 'Valid FITS file'
-      print pixcrd2
+      print('Valid FITS file')
+      print(pixcrd2)
 
 
 
      
     if plot_sources == 'yes':
-        print 'creating region file from source list'
+        print('creating region file from source list')
       # here we read the list ra dec and create a DS9 region file
         data = ascii.read(sourcelist)
         #print data['col1']
         #print len(data)
         #print data.info
-        print len(data.colnames)  # this gives the number of columns in the input file
+        print(len(data.colnames))  # this gives the number of columns in the input file
         
         if len(data.colnames) == 2:
           flagsources = 2
           #in this case the user inputs ra dec
           ra = np.array(data['col1'], np.float_)
           dec = np.array(data['col2'], np.float_)
-          print ra
-          print dec 
+          print(ra)
+          print(dec) 
           world= []
           for i in range(len(ra)):
               world.append((ra[i],dec[i]))
@@ -391,9 +391,9 @@ def footprints(input,\
           ra = np.array(data['col1'], np.float_)
           dec = np.array(data['col2'], np.float_)
           sourcetype = data['col3']
-          print ra
-          print dec 
-          print sourcetype.info
+          print(ra)
+          print(dec) 
+          print(sourcetype.info)
           #select sources according to type
           a= np.where(sourcetype == 'F')[0]  #fillers
           rafill = ra[a]
@@ -457,7 +457,7 @@ def footprints(input,\
                 file.write(newline)
           file.close()
         if len(data.colnames) <2:
-           print 'Invalid input file'
+           print('Invalid input file')
 
 
 #sys.exit("quitting now...")
@@ -465,7 +465,7 @@ def footprints(input,\
     #-------------------------------------------------------------------
     # nirspec msa
     if plot_msa == 'yes':
-        print 'processing NIRSPEC MSA'
+        print('processing NIRSPEC MSA')
         v2msa,v3msa,aper,v2ref,v3ref = np.loadtxt('table-nirspec-msa.txt', unpack=True, skiprows=0, dtype='str')
         v2msa = np.array(v2msa, np.float_)
         v3msa = np.array(v3msa, np.float_)
@@ -519,7 +519,7 @@ def footprints(input,\
     # nircam long    
     #print plot_long                            
     if plot_long == 'yes':
-        print 'processing NIRCAM LWC'
+        print('processing NIRCAM LWC')
 
         create_footprint_center(input,ra_long,dec_long,'ds9-long-centre.reg',collong)
         v2c,v3c,aper,v2ref,v3ref = np.loadtxt('table-nircam-long.txt', unpack=True, skiprows=0, dtype='str')
@@ -699,7 +699,7 @@ def footprints(input,\
 
           xr0= xr
           yr0= yr
-          print 'long',xr, yr
+          print('long',xr, yr)
           ra0  = ra_long 
           dec0 = dec_long
           pa = theta_long
@@ -708,7 +708,7 @@ def footprints(input,\
           for shft in range(len(shiftv2)):
                  v20 = xr0+(shiftv2[shft])  # here we shift 
                  v30 = yr0+(shiftv3[shft])  # here we shift 
-                 print v20,v30
+                 print(v20,v30)
                  m = attitude(v20, v30, ra0, dec0, pa)
                  for k in range(len(v2)):
                      a = pointing(m, v2[k], v3[k])
@@ -728,8 +728,8 @@ def footprints(input,\
 #-------------------------------------------------------------------
 # nircam short                                
     if plot_short == 'yes':
-        print plot_short
-        print 'processing NIRCAM SWC'
+        print(plot_short)
+        print('processing NIRCAM SWC')
         create_footprint_center(input,ra_short,dec_short,'ds9-short-centre.reg',colshort)
 
         v2sh,v3sh,aper,v2ref,v3ref = np.loadtxt('table-nircam-short.txt', unpack=True, skiprows=0, dtype='str')
@@ -777,7 +777,7 @@ def footprints(input,\
               myv3 = np.append(myv3,a[1])
            myv2 = np.array(myv2)
            myv3 = np.array(myv3)
-           print myv2
+           print(myv2)
            create_footprint(input,myv2,myv3,8,'ds9-short-no.reg',colshort)
 
         if dither_pattern_short == 'three':
@@ -965,7 +965,7 @@ def footprints(input,\
           xr = ((xr1+xr2)/2.) 
           yr = ((yr1+yr2)/2.)
  
-          print 'short', xr,yr
+          print('short', xr,yr)
           xr0= xr 
           yr0= yr
           ra0  = ra_short 
@@ -978,7 +978,7 @@ def footprints(input,\
           for shft in range(len(shiftv2)):
                  v20 = xr0-(shiftv2[shft])  # here we shift 
                  v30 = yr0-(shiftv3[shft])  # here we shift 
-                 print v20,v30
+                 print(v20,v30)
                  m = attitude(v20, v30, ra0, dec0, pa)
                  for k in range(len(v2)):
                      a = pointing(m, v2[k], v3[k])
@@ -1054,9 +1054,9 @@ def footprints(input,\
 
     if plot_sources == 'yes':
       if flagsources == 3:
-        print plot_sources
+        print(plot_sources)
         d.set('regions ds9-sources-fillers.reg')
         d.set('regions ds9-sources-primary.reg')  
       if flagsources == 2:
-        print plot_sources
+        print(plot_sources)
         d.set('regions ds9-sources.reg')
