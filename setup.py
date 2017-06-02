@@ -18,8 +18,10 @@ setup(
     ],
     install_requires=[
         'astropy',
+        'matplotlib',
         'numpy',
         'scipy',
+        'pillow'
     ],
 
     packages=find_packages(),
