@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-
+from . import DATADIR
 from tkinter import *
 import tkinter as tk
 import tkinter.constants
@@ -10,18 +10,12 @@ from tkinter import Tk
 from tkinter.filedialog import askopenfilename
 
 
-import io
-import base64
 from PIL import Image, ImageTk
-import PIL.Image
 from .footprints import *
 from .inputdata import *
 
-import shutil
-import sys
 import os
 
-from astropy.io import ascii
 from .plot_timeline import *
 
 
@@ -195,8 +189,6 @@ def loadom(value):
     offverVar.set(offv)
     colmsaVar.set(colormsa)
 
-# sys.exit("quitting now...")
-
 
 def makeWindow():
    # global nameVar, xminVar, xmaxVar, variable, ptVar, select
@@ -213,12 +205,7 @@ def makeWindow():
     win.resizable(width=FALSE, height=FALSE)
     win.title('STScI JWST/NIRspec visualization tool')
 
-    #im = base64.b64decode(encoded)
-    #file_like = cStringIO.StringIO(im)
-    #image = PIL.Image.open(file_like)
-    # image.save('test.png')
-    #image1 = ImageTk.PhotoImage(Image.open("test.png"))
-    image1 = ImageTk.PhotoImage(Image.open("back-04.png"))
+    image1 = ImageTk.PhotoImage(Image.open(os.path.join(DATADIR, "back-04.png")))
 
     w = image1.width()
     h = image1.height()
@@ -394,6 +381,7 @@ def makeWindow():
 
     return win
 
+if __name__ == '__main__':
+    win = makeWindow()
+    win.mainloop()
 
-win = makeWindow()
-win.mainloop()
