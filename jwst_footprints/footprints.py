@@ -22,7 +22,7 @@ import numpy as np
 from astropy import wcs
 from astropy.io import fits
 from astropy.io import ascii
-from . import DATADIR
+from . import PKG_DATA_DIR
 
 
 def arcsec2deg(ra, dec, v2arcsec, v3arcsec, xr, yr):
@@ -498,7 +498,7 @@ def footprints(inputfile,
     # nirspec msa
     if plot_msa == 'yes':
         print('processing NIRSPEC MSA')
-        v2msa, v3msa, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nirspec-msa.txt'))
+        v2msa, v3msa, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nirspec-msa.txt'))
         v2msa = np.array(v2msa, np.float_)
         v3msa = np.array(v3msa, np.float_)
 
@@ -563,7 +563,7 @@ def footprints(inputfile,
             dec_long,
             'ds9-long-centre.reg',
             collong)
-        v2c, v3c, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nircam-long.txt'))
+        v2c, v3c, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATADIR, 'table-nircam-long.txt'))
         v2_0 = np.array(v2c, np.float_)
         v3_0 = np.array(v3c, np.float_)
 
@@ -801,7 +801,7 @@ def footprints(inputfile,
             'ds9-short-centre.reg',
             colshort)
 
-        v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nircam-short.txt'))
+        v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATADIR, 'table-nircam-short.txt'))
         v2sh = np.array(v2sh, np.float_)
         v3sh = np.array(v3sh, np.float_)
 
@@ -960,7 +960,7 @@ def footprints(inputfile,
             shiftv3 = [-30.0, -18.0, -6.0, 6.0, 18.0, 30.0]
 
             # determine center of rotation using info from long dither pattern
-            v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nircam-long.txt'))
+            v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nircam-long.txt'))
             v2sh = np.array(v2sh, np.float_)
             v3sh = np.array(v3sh, np.float_)
 
@@ -975,7 +975,7 @@ def footprints(inputfile,
             xr = ((xa + xb) / 2.)
             yr = ((ya + yb) / 2.)
 
-            v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(DATADIR, 'table-nircam-short.txt'))
+            v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nircam-short.txt'))
             v2sh = np.array(v2sh, np.float_)
             v3sh = np.array(v3sh, np.float_)
 

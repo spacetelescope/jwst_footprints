@@ -1,51 +1,46 @@
-plotnames = ['plot']
-#
-# background fits file
-#
-fitsname = {
-    'plot': '/Users/lubeda/Desktop/version-1.0/mosaic_ngc5194_acs_f814w_sci.fits'
-    }
-#
-# source catalog
-#
-catname = {'plot': '/Users/lubeda/Desktop/version-1.0/m51.radec'}
-#
-# to plot or not to plot ?
-#
-plotmsa = {'plot': 'no'}
-plotshort = {'plot': 'no'}
-plotlong = {'plot': 'no'}
-plotsrc = {'plot': 'no'}
-dither = {'plot': 'no'}
-mosaic = {'plot': 'no'}
-#
-# color lines
-#
-colormsa = {'plot': 'red'}
-colorshort = {'plot': 'green'}
-colorlong = {'plot': 'cyan'}
-#
-# fiducial point equatorial coordinates
-# in degrees
-#
-ranircam = {'plot': '202.46959'}  # RA  NIRCam
-decnircam = {'plot': '47.195187'}  # Dec NIRCam
-thetanircam = {'plot': '0.0'}  # APA NIRCam
-ranirspec = {'plot': '202.46959'}  # RA  NIRSpec
-decnirspec = {'plot': '47.195187'}  # Dec NIRSpec
-thetanirspec = {'plot': '0.0'}  # APA NIRSpec
-#
-# nircam dither offsest
-# in arcsec
-#
-offh = {'plot': '10.0'}
-offv = {'plot': '0.0'}
-#
-# DS9 display
-#
-cmap = {'plot': 'grey'}         # grey, red, green, blue, heat
-limmin = {'plot': '0.0'}
-limmax = {'plot': '100.0'}
-scale = {'plot': 'log'}         # linear, log, power, squared
-#
-#
+default_config = dict(
+    #
+    # Input filenames
+    #
+    fits_name='',
+    cat_name='',
+    #
+    # to plot or not to plot ?
+    #
+    plot_names=['plot'],
+    plot_msa=False,
+    plot_short=False,
+    plot_long=False,
+    plot_src=False,
+    dither=False,
+    mosaic=False,
+    #
+    # color lines
+    #
+    color_msa='red',
+    color_short='green',
+    color_long='cyan',
+    #
+    # fiducial point equatorial coordinates
+    # in degrees
+    #
+    ra_nircam=202.46959,
+    dec_nircam=47.195187,
+    theta_nircam=0.0,
+
+    ra_nirspec=202.46959,
+    dec_nirspec=47.195187,
+    theta_nirspec=0.0,
+    #
+    # nircam dither offset
+    #
+    off_h=10.0,
+    off_v=0.0,
+    #
+    # DS9 display
+    #
+    cmap='grey',    # grey, red, green, blue, heat
+    lim_min=0.0,
+    lim_max=100.0,
+    scale='log'     # linear, log, power, squared
+)
