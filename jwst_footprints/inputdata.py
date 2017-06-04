@@ -8,12 +8,12 @@ default_config = dict(
     # to plot or not to plot ?
     #
     plot_names=['plot'],
-    plot_msa=False,
-    plot_short=False,
-    plot_long=False,
-    plot_src=False,
-    dither=False,
-    mosaic=False,
+    plot_msa="No",
+    plot_short="No",
+    plot_long="No",
+    plot_src="No",
+    dither="No",
+    mosaic="No",
     #
     # color lines
     #
