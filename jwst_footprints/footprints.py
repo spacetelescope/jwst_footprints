@@ -324,18 +324,18 @@ def read_table(inputfile, delim=' '):
 
 def footprints(inputfile,
                sourcelist,
-               plot_long='no',
-               plot_short='no',
-               plot_msa='no',
-               plot_sources='no',
+               plot_long='No',
+               plot_short='No',
+               plot_msa='No',
+               plot_sources='No',
                ra_long=202.47,
                dec_long=47.2,
                theta_long=0.0,
-               dither_pattern_long='no',
+               dither_pattern_long='No',
                ra_msa=202.47,
                dec_msa=47.2,
                theta_msa=0.0,
-               mosaic='no',
+               mosaic='No',
                usershiftv2=0.0,
                usershiftv3=0.0,
                colmsa='red',
@@ -372,7 +372,7 @@ def footprints(inputfile,
         print('Valid FITS file')
         print(pixcrd2)
 
-    if plot_sources == 'yes':
+    if plot_sources == 'Yes':
         print('creating region file from source list')
         # here we read the list ra dec and create a DS9 region file
         data = ascii.read(sourcelist)
@@ -496,7 +496,7 @@ def footprints(inputfile,
 
     #-------------------------------------------------------------------
     # nirspec msa
-    if plot_msa == 'yes':
+    if plot_msa == 'Yes':
         print('processing NIRSPEC MSA')
         v2msa, v3msa, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nirspec-msa.txt'))
         v2msa = np.array(v2msa, np.float_)
@@ -554,7 +554,7 @@ def footprints(inputfile,
     #-------------------------------------------------------------------
     # nircam long
     # print plot_long
-    if plot_long == 'yes':
+    if plot_long == 'Yes':
         print('processing NIRCAM LWC')
 
         create_footprint_center(
@@ -563,11 +563,11 @@ def footprints(inputfile,
             dec_long,
             'ds9-long-centre.reg',
             collong)
-        v2c, v3c, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATADIR, 'table-nircam-long.txt'))
+        v2c, v3c, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nircam-long.txt'))
         v2_0 = np.array(v2c, np.float_)
         v3_0 = np.array(v3c, np.float_)
 
-        if dither_pattern_long == 'no' and mosaic == 'no':
+        if dither_pattern_long == 'No' and mosaic == 'No':
             #shiftv2 = [0.0, -58.0,  58.0]
             #shiftv3 = [0.0, -23.5,  23.5]
             v2 = v2_0
@@ -598,7 +598,7 @@ def footprints(inputfile,
             myv3 = np.array(myv3)
             create_footprint(inputfile, myv2, myv3, 2, 'ds9-long-no.reg', collong)
 
-        if dither_pattern_long == 'three' and mosaic == 'no':
+        if dither_pattern_long == 'Three' and mosaic == 'No':
             shiftv2 = [0.0, -58.0, 58.0]
             shiftv3 = [0.0, -23.5, 23.5]
             v2 = v2_0
@@ -635,7 +635,7 @@ def footprints(inputfile,
                 'ds9-long-three.reg',
                 collong)
 
-        if dither_pattern_long == 'threetight' and mosaic == 'no':
+        if dither_pattern_long == 'Threetight' and mosaic == 'No':
             shiftv2 = [0.0, -58.0, 58.0]
             shiftv3 = [0.0, -7.5, 7.5]
             v2 = v2_0
@@ -672,7 +672,7 @@ def footprints(inputfile,
                 'ds9-long-threetight.reg',
                 collong)
 
-        if dither_pattern_long == 'six' and mosaic == 'no':
+        if dither_pattern_long == 'Six' and mosaic == 'No':
             shiftv2 = [-72.0, -43.0, -14.0, 15.0, 44.0, 73.0]
             shiftv3 = [-30.0, -18.0, -6.0, 6.0, 18.0, 30.0]
             # determine center of rotation
@@ -717,18 +717,18 @@ def footprints(inputfile,
 
 
 #        print mosaic
-        if (dither_pattern_long == 'three' or dither_pattern_long ==
-                'threetight' or dither_pattern_long == 'no') and mosaic == 'yes':
-            if dither_pattern_long == 'three':
+        if (dither_pattern_long == 'Three' or dither_pattern_long ==
+                'Threetight' or dither_pattern_long == 'No') and mosaic == 'Yes':
+            if dither_pattern_long == 'Three':
                 shiftv3 = [0.0, -23.5, 23.5, usershiftv3 + 0.0,
                            usershiftv3 - 23.5, usershiftv3 + 23.5]
-            if dither_pattern_long == 'threetight':
+            if dither_pattern_long == 'Threetight':
                 shiftv3 = [0.0, -7.5, 7.5, usershiftv3 + 0.0,
                            usershiftv3 - 7.5, usershiftv3 + 7.5]
 
             shiftv2 = [0.0, -58.0, 58.0, usershiftv2 + 0.0,
                        usershiftv2 - 58.0, usershiftv2 + 58.0]
-            if (dither_pattern_long == 'no'):
+            if (dither_pattern_long == 'No'):
                 shiftv3 = [0.0, usershiftv3 + 0.0]
                 shiftv2 = [0.0, usershiftv2 + 0.0]
 
@@ -775,10 +775,10 @@ def footprints(inputfile,
                     myv3 = np.append(myv3, a[1])
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
-            if (dither_pattern_long == 'no'):
+            if (dither_pattern_long == 'No'):
                 napertures = 4
             if (dither_pattern_long ==
-                    'three' or dither_pattern_long == 'threetight'):
+                    'Three' or dither_pattern_long == 'Threetight'):
                 napertures = 12
             create_footprint(
                 inputfile,
@@ -791,7 +791,7 @@ def footprints(inputfile,
 
 #-------------------------------------------------------------------
 # nircam short
-    if plot_short == 'yes':
+    if plot_short == 'Yes':
         print(plot_short)
         print('processing NIRCAM SWC')
         create_footprint_center(
@@ -801,11 +801,11 @@ def footprints(inputfile,
             'ds9-short-centre.reg',
             colshort)
 
-        v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATADIR, 'table-nircam-short.txt'))
+        v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nircam-short.txt'))
         v2sh = np.array(v2sh, np.float_)
         v3sh = np.array(v3sh, np.float_)
 
-        if dither_pattern_short == 'no':
+        if dither_pattern_short == 'No':
             x2 = v2sh
             x3 = v3sh
             v2 = v2sh
@@ -855,7 +855,7 @@ def footprints(inputfile,
                 'ds9-short-no.reg',
                 colshort)
 
-        if dither_pattern_short == 'three':
+        if dither_pattern_short == 'Three':
             shiftv2 = [0.0, -58.0, 58.0]
             shiftv3 = [0.0, -23.5, 23.5]
             x2 = v2sh
@@ -905,7 +905,7 @@ def footprints(inputfile,
                 'ds9-short-three.reg',
                 colshort)
 
-        if dither_pattern_short == 'threetight':
+        if dither_pattern_short == 'Threetight':
             shiftv2 = [0.0, -58.0, 58.0]
             shiftv3 = [0.0, -7.5, 7.5]
             x2 = v2sh
@@ -955,7 +955,7 @@ def footprints(inputfile,
                 'ds9-short-threetight.reg',
                 colshort)
 
-        if dither_pattern_short == 'six':
+        if dither_pattern_short == 'Six':
             shiftv2 = [-72.0, -43.0, -14.0, 15.0, 44.0, 73.0]
             shiftv3 = [-30.0, -18.0, -6.0, 6.0, 18.0, 30.0]
 
@@ -1010,19 +1010,19 @@ def footprints(inputfile,
 
 #  mosaic  short wavelength channel
 
-        if (dither_pattern_short == 'three' or dither_pattern_short ==
-                'threetight' or dither_pattern_short == 'no') and mosaic == 'yes':
-            if dither_pattern_short == 'three':
+        if (dither_pattern_short == 'Three' or dither_pattern_short ==
+                'Threetight' or dither_pattern_short == 'No') and mosaic == 'Yes':
+            if dither_pattern_short == 'Three':
                 shiftv3 = [0.0, -23.5, 23.5, usershiftv3 + 0.0,
                            usershiftv3 - 23.5, usershiftv3 + 23.5]
-            if dither_pattern_short == 'threetight':
+            if dither_pattern_short == 'Threetight':
                 shiftv3 = [0.0, -7.5, 7.5, usershiftv3 + 0.0,
                            usershiftv3 - 7.5, usershiftv3 + 7.5]
 
             shiftv2 = [0.0, -58.0, 58.0, usershiftv2 + 0.0,
                        usershiftv2 - 58.0, usershiftv2 + 58.0]
 
-            if (dither_pattern_short == 'no'):
+            if (dither_pattern_short == 'No'):
                 shiftv3 = [0.0, usershiftv3 + 0.0]
                 shiftv2 = [0.0, usershiftv2 + 0.0]
 
@@ -1073,10 +1073,10 @@ def footprints(inputfile,
                     myv3 = np.append(myv3, a[1])
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
-            if (dither_pattern_short == 'no'):
+            if (dither_pattern_short == 'No'):
                 napertures = 16
             if (dither_pattern_short ==
-                    'three' or dither_pattern_short == 'threetight'):
+                    'Three' or dither_pattern_short == 'Threetight'):
                 napertures = 48
             create_footprint(
                 inputfile,
@@ -1088,6 +1088,11 @@ def footprints(inputfile,
 #  mosaic  short wavelength channel
 
     import pyds9
+
+    # Start xpans prior to running DS9
+    pyds9.ds9_xpans()
+
+    # Run DS9
     d = pyds9.DS9()
     d.set('tile yes')
     d.set('frame 1')
@@ -1099,40 +1104,40 @@ def footprints(inputfile,
     # iraf.tv()
 
     # load regions
-    if plot_long == 'yes':
+    if plot_long == 'Yes':
         d.set('regions ds9-long-centre.reg')
-        if mosaic == 'no':
-            if dither_pattern_long == 'threetight':
+        if mosaic == 'No':
+            if dither_pattern_long == 'Threetight':
                 d.set('regions ds9-long-threetight.reg')
-            if dither_pattern_long == 'three':
+            if dither_pattern_long == 'Three':
                 d.set('regions ds9-long-three.reg')
-            if dither_pattern_long == 'six':
+            if dither_pattern_long == 'Six':
                 d.set('regions ds9-long-six.reg')
-            if dither_pattern_long == 'no':
+            if dither_pattern_long == 'No':
                 d.set('regions ds9-long-no.reg')
-        if mosaic == 'yes':
+        if mosaic == 'Yes':
             d.set('regions ds9-long-mosaic.reg')
 
-    if plot_short == 'yes':
+    if plot_short == 'Yes':
         d.set('regions ds9-short-centre.reg')
-        if mosaic == 'no':
-            if dither_pattern_short == 'threetight':
+        if mosaic == 'No':
+            if dither_pattern_short == 'Threetight':
                 d.set('regions ds9-short-threetight.reg')
-            if dither_pattern_short == 'three':
+            if dither_pattern_short == 'Three':
                 d.set('regions ds9-short-three.reg')
-            if dither_pattern_short == 'six':
+            if dither_pattern_short == 'Six':
                 d.set('regions ds9-short-six.reg')
-            if dither_pattern_short == 'no':
+            if dither_pattern_short == 'No':
                 d.set('regions ds9-short-no.reg')
-        if mosaic == 'yes':
+        if mosaic == 'Yes':
             d.set('regions ds9-short-mosaic.reg')
 
-    if plot_msa == 'yes':
+    if plot_msa == 'Yes':
         d.set('regions ds9-msa.reg')
         d.set('regions ds9-msa-centre.reg')
        # d.set('ds9-ifu.reg')
 
-    if plot_sources == 'yes':
+    if plot_sources == 'Yes':
         if flagsources == 3:
             print(plot_sources)
             d.set('regions ds9-sources-fillers.reg')
