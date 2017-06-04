@@ -4,6 +4,8 @@
 
 # Data
 *.fits
+*.reg
+*.dat
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

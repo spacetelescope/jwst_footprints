@@ -41,84 +41,85 @@ class Ephemeris:
         self.amin = 0.
         self.amax = 0.
         aV = rotationsx.Vector(0., 0., 0.)
-        fin = file(afile, 'r').readlines()
-        if "l2_halo_FDF_060619.trh" in afile:
-            ascale = 0.001
-        else:
-            ascale = 1.0
-        if "horizons_EM_L2" in afile:
-            not_there = True
-            istart = 0
-            while fin[istart][:5] != "$$SOE":
-                if fin[istart].find('Center body name:') > - \
-                        1:  # Checks that the Sun is the central body!
-                    if fin[istart].find('Sun') > -1:
-                        not_there = False
-                    else:
-                        print(fin[istart])
+        with open(afile, 'r') as afp:
+            fin = afp.readlines()
+            if "l2_halo_FDF_060619.trh" in afile:
+                ascale = 0.001
+            else:
+                ascale = 1.0
+            if "horizons_EM_L2" in afile:
+                not_there = True
+                istart = 0
+                while fin[istart][:5] != "$$SOE":
+                    if fin[istart].find('Center body name:') > - \
+                            1:  # Checks that the Sun is the central body!
+                        if fin[istart].find('Sun') > -1:
+                            not_there = False
+                        else:
+                            print(fin[istart])
+                    istart += 1
                 istart += 1
-            istart += 1
-            if not_there:
-                print(
-                    "This ephemeris does not use the Sun as the center body.  It should not be used.")
-                exit(-1)
+                if not_there:
+                    print(
+                        "This ephemeris does not use the Sun as the center body.  It should not be used.")
+                    exit(-1)
 
-            while fin[istart][:5] != "$$EOE":
-                item = item.strip(fin[istart])
-                item = item.split(',')
-                adate = float(item[0]) - 2400000.5  # represent dates as mjds
-                x = float(item[2]) * ascale
-                y = float(item[3]) * ascale
-                z = float(item[4]) * ascale
-                if cnvrt:
-                    aV.set_eq(x, y, z)
-                    ll = aV.length()
-                    aV = aV / ll
-                    aV = Qecl2eci.inv_cnvrt(aV)
-                    aV = aV * ll
-                    x = aV.rx()
-                    y = aV.ry()
-                    z = aV.rz()
-                self.datelist.append(adate)
-                self.xlist.append(x)
-                self.ylist.append(y)
-                self.zlist.append(z)
-                if self.amin == 0.:
-                    self.amin = adate
-                istart += 1
-        else:
-            for item in fin[2:]:
-                item = item.strip(item)
-                item = item.split(item)
-                adate = time2.mjd_from_string(
-                    item[0])  # represent dates as mjds
-                x = float(item[1]) * ascale
-                y = float(item[2]) * ascale
-                z = float(item[3]) * ascale
-                if cnvrt:
-                    aV.set_eq(x, y, z)
-                    ll = aV.length()
-                    aV = aV / ll
-                    aV = Qecl2eci.inv_cnvrt(aV)
-                    aV = aV * ll
-                    x = aV.rx()
-                    y = aV.ry()
-                    z = aV.rz()
-                self.datelist.append(adate)
-                self.xlist.append(x)
-                self.ylist.append(y)
-                self.zlist.append(z)
-                if self.amin == 0.:
-                    self.amin = adate
-        self.amax = adate
-        # yp = spline(xa,ya,0.,0.)
-        # Saving spline parameters
-        # self.xlistp = spline(self.datelist,self.xlist,1.e31,1.e31)
-        # self.ylistp = spline(self.datelist,self.ylist,1.e31,1.e31)
-        # self.zlistp = spline(self.datelist,self.zlist,1.e31,1.e31)
-        del fin
-        # print()
-        # len(self.datelist),len(self.xlist),len(self.ylist),len(self.zlist)
+                while fin[istart][:5] != "$$EOE":
+                    item = item.strip(fin[istart])
+                    item = item.split(',')
+                    adate = float(item[0]) - 2400000.5  # represent dates as mjds
+                    x = float(item[2]) * ascale
+                    y = float(item[3]) * ascale
+                    z = float(item[4]) * ascale
+                    if cnvrt:
+                        aV.set_eq(x, y, z)
+                        ll = aV.length()
+                        aV = aV / ll
+                        aV = Qecl2eci.inv_cnvrt(aV)
+                        aV = aV * ll
+                        x = aV.rx()
+                        y = aV.ry()
+                        z = aV.rz()
+                    self.datelist.append(adate)
+                    self.xlist.append(x)
+                    self.ylist.append(y)
+                    self.zlist.append(z)
+                    if self.amin == 0.:
+                        self.amin = adate
+                    istart += 1
+            else:
+                for item in fin[2:]:
+                    item = item.strip(item)
+                    item = item.split(item)
+                    adate = time2.mjd_from_string(
+                        item[0])  # represent dates as mjds
+                    x = float(item[1]) * ascale
+                    y = float(item[2]) * ascale
+                    z = float(item[3]) * ascale
+                    if cnvrt:
+                        aV.set_eq(x, y, z)
+                        ll = aV.length()
+                        aV = aV / ll
+                        aV = Qecl2eci.inv_cnvrt(aV)
+                        aV = aV * ll
+                        x = aV.rx()
+                        y = aV.ry()
+                        z = aV.rz()
+                    self.datelist.append(adate)
+                    self.xlist.append(x)
+                    self.ylist.append(y)
+                    self.zlist.append(z)
+                    if self.amin == 0.:
+                        self.amin = adate
+            self.amax = adate
+            # yp = spline(xa,ya,0.,0.)
+            # Saving spline parameters
+            # self.xlistp = spline(self.datelist,self.xlist,1.e31,1.e31)
+            # self.ylistp = spline(self.datelist,self.ylist,1.e31,1.e31)
+            # self.zlistp = spline(self.datelist,self.zlist,1.e31,1.e31)
+            del fin
+            # print()
+            # len(self.datelist),len(self.xlist),len(self.ylist),len(self.zlist)
 
     def report_ephemeris(self, limit=100000, pathname=None):
         """Prints a formatted report of the ephemeris.

@@ -1,8 +1,11 @@
 #! /usr/bin/env python
 
+import os
 import sys
 import math
+
 from . import ephemeris_old2x as EPH
+from . import PKG_DATA_DIR
 
 D2R = math.pi / 180.  # degrees to radians
 R2D = 180. / math.pi  # radians to degrees
@@ -91,7 +94,7 @@ def rollangle(ra, dec):
 
     ECL_FLAG = False
 
-    A_eph = EPH.Ephemeris("horizons_EM_L2_wrt_Sun_2018_2022.txt", ECL_FLAG)
+    A_eph = EPH.Ephemeris(os.path.join(PKG_DATA_DIR, "horizons_EM_L2_wrt_Sun_2018_2022.txt"), ECL_FLAG)
 
     # search_start = 58484.00000000  #Jan 1, 2019
     search_start = 58392.00000000  # Oct 1, 2018         LEONARDO
