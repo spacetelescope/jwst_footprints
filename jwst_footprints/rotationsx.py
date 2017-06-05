@@ -235,6 +235,7 @@ class Vector (object):
         return (self)
 
     def __itruediv__(self, rs):
+        """Implements Vector /= float """
         self.x /= rs
         self.y /= rs
         self.z /= rs
