@@ -202,12 +202,16 @@ class Vector (object):
         z = self.z - rs.z
         return (Vector(x, y, z))
 
-    def __div__(self, rs):
+    def __truediv__(self, rs):
         """Implements Vector / float """
         x = self.x / rs
         y = self.y / rs
         z = self.z / rs
         return (Vector(x, y, z))
+
+    def __div__(self, rs):
+        """Implements Vector / float """
+        return type(self).__truediv__(self, rs)
 
     def __imul__(self, rs):
         """Implements Vector *= float """
@@ -230,12 +234,16 @@ class Vector (object):
         self.z -= rs.z
         return (self)
 
-    def __idiv__(self, rs):
+    def __itruediv__(self, rs):
         """Implements Vector /= float """
         self.x /= rs
         self.y /= rs
         self.z /= rs
         return (self)
+
+    def __idiv__(self, rs):
+        """Implements Vector /= float """
+        return type(self).__itruediv__(self, rs)
 
     def create_matrix(self):
         """Converts a Vector into a single-column matrix."""
