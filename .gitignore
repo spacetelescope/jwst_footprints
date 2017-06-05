@@ -7,6 +7,8 @@
 *.reg
 *.dat
 *.radec
+nirspec_nircam.txt
+values.dat
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
