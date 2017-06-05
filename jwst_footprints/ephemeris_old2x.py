@@ -65,7 +65,7 @@ class Ephemeris:
                     exit(-1)
 
                 while fin[istart][:5] != "$$EOE":
-                    item = item.strip(fin[istart])
+                    item = fin[istart].strip()
                     item = item.split(',')
                     adate = float(item[0]) - 2400000.5  # represent dates as mjds
                     x = float(item[2]) * ascale
@@ -89,8 +89,8 @@ class Ephemeris:
                     istart += 1
             else:
                 for item in fin[2:]:
-                    item = item.strip(item)
-                    item = item.split(item)
+                    item = fin[istart].strip()
+                    item = item.split(',')
                     adate = time2.mjd_from_string(
                         item[0])  # represent dates as mjds
                     x = float(item[1]) * ascale

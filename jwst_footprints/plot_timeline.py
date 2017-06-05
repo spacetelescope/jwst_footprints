@@ -2,6 +2,8 @@
 
 
 # load modules
+import matplotlib
+matplotlib.use("TkAgg")
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 from astropy.io import ascii
