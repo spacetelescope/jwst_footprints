@@ -21,7 +21,8 @@ setup(
         'matplotlib',
         'numpy',
         'scipy',
-        'pillow'
+        'pillow',
+        'pyds9'
     ],
 
     packages=find_packages(),
