@@ -1,12 +1,10 @@
 #! /usr/bin/env python
 """Module for general rotations library."""
+from __future__ import absolute_import, division, print_function
 
-#import random
 import math
-from math import *
+#from . import quaternionx
 from . import math_extensionsx as math2
-from . import quaternionx as quat
-
 
 class GalacticPole (object):
     """Represents coordinates of galactic pole."""
@@ -19,9 +17,9 @@ class GalacticPole (object):
         ascending_node = ascending node of pole, in degrees."""
 
         # Arguments specified in degrees, but values represented in radians.
-        self.latitude = radians(latitude)
-        self.longitude = radians(longitude)
-        self.anode = radians(ascending_node)
+        self.latitude = math.radians(latitude)
+        self.longitude = math.radians(longitude)
+        self.anode = math.radians(ascending_node)
 
     def __str__(self):
         """Returns string representation of the galactic pole."""
@@ -475,7 +473,7 @@ Any subset of the Cartesian coordinates may be specifed."""
         This is an alternative formulation for rotate_about_eigenaxis.
         Interface is the same as rotate_about_eigenaxis."""
 
-        q = quat.Quaternion(eigenaxis, 0.0)
+        q = Quaternion(eigenaxis, 0.0)
 
         # Need to negate here because set_values performs a negative rotation
         # quaternion now represents the rotation

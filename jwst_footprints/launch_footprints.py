@@ -1,15 +1,24 @@
 #!/usr/bin/env python
 # encoding: utf-8
+from __future__ import absolute_import, division, print_function
+
 import json
 import os
+
 from jwst_footprints import PKG_DATA_DIR, CONFIG_DIR, CONFIG_FILE
 from jwst_footprints.footprints import footprints
 from jwst_footprints.defaults import default_config
 from jwst_footprints.plot_timeline import plottimeline
 
-from tkinter import Tk, Button, Entry, Label, OptionMenu, StringVar, \
-                    Toplevel, TRUE, FALSE
-from tkinter.filedialog import askopenfilename
+try:
+    from Tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar, \
+                         Toplevel, TRUE, FALSE)
+    from tkFileDialog import askopenfilename
+except ImportError as e:
+    from tkinter.filedialog import askopenfilename
+    from tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar, \
+                         Toplevel, TRUE, FALSE)
+
 from PIL import ImageTk
 
 

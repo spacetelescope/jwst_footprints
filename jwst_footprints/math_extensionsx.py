@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import absolute_import, division, print_function
 # math_extensions module
 
 """This module provides simple extensions to the Python mathematical library."""
