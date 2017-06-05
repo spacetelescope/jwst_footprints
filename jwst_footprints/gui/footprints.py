@@ -5,10 +5,10 @@ from __future__ import absolute_import, division, print_function
 import json
 import os
 
-from . import PKG_DATA_DIR, CONFIG_DIR, CONFIG_FILE
-from .footprints import footprints
-from .defaults import default_config
-from .plot_timeline import plottimeline
+from .. import PKG_DATA_DIR, CONFIG_DIR, CONFIG_FILE
+from ..footprints import footprints
+from ..defaults import default_config
+from ..plot_timeline import plottimeline
 
 try:
     from Tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar, \
