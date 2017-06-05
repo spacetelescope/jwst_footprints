@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import absolute_import, division, print_function
 # quaternion module
 
 """Version 4 September 9, 2010 WMK
@@ -23,7 +24,7 @@ Modified cnvrt method to return a CelestialVector."""
 #  Version 1.0 August 3, 2010
 #  Got rid of degrees trig functions.
 
-from math import *
+#from math import *
 import math
 from .math_extensionsx import *
 from . import rotationsx as rot

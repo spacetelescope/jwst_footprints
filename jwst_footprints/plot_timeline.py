@@ -1,15 +1,15 @@
 #! /usr/bin/env python
+from __future__ import absolute_import, division, print_function
 
-
-# load modules
+import datetime
 import matplotlib
 matplotlib.use("TkAgg")
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
+import numpy as np
+
 from astropy.io import ascii
 from astropy.time import Time
-import numpy as np
-import datetime
 from .find_tgt_info import *
 
 

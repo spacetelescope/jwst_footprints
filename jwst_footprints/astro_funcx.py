@@ -2,7 +2,7 @@
 # Version 1. August 2, 2010
 # Version 2. August 3, 2010
 #   Got rid of degrees trig functions
-
+from __future__ import absolute_import, division, print_function
 from math import atan2, acos, cos, sin, pi
 
 D2R = pi / 180.

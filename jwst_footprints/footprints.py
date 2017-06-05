@@ -15,10 +15,13 @@ Based on work by Colin Cox and Wayne Kinzel
 
 """
 
+from __future__ import absolute_import, division, print_function
+
 import sys
 import os
-from math import *
 import numpy as np
+
+from math import *
 from astropy import wcs
 from astropy.io import fits
 from astropy.io import ascii
