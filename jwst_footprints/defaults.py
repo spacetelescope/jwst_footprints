@@ -2,8 +2,9 @@ default_config = dict(
     #
     # Input filenames
     #
-    fits_name='',
+    fits_name='/Users/change-me/',
     cat_name='',
+    out_dir='/Users/change-me/',
     #
     # to plot or not to plot ?
     #
@@ -12,14 +13,14 @@ default_config = dict(
     plot_short="No",
     plot_long="No",
     plot_src="No",
-    dither="No",
+    dither="None",
     mosaic="No",
     #
     # color lines
     #
-    color_msa='red',
-    color_short='green',
-    color_long='cyan',
+    color_msa='Red',
+    color_short='Green',
+    color_long='Blue',
     #
     # fiducial point equatorial coordinates
     # in degrees

@@ -68,7 +68,8 @@ class Ephemeris:
                 while fin[istart][:5] != "$$EOE":
                     item = fin[istart].strip()
                     item = item.split(',')
-                    adate = float(item[0]) - 2400000.5  # represent dates as mjds
+                    # represent dates as mjds
+                    adate = float(item[0]) - 2400000.5
                     x = float(item[2]) * ascale
                     y = float(item[3]) * ascale
                     z = float(item[4]) * ascale

@@ -11,12 +11,12 @@ from ..defaults import default_config
 from ..plot_timeline import plottimeline
 
 try:
-    from Tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar, \
+    from Tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar,
                          Toplevel, TRUE, FALSE)
     from tkFileDialog import askopenfilename
 except ImportError as e:
     from tkinter.filedialog import askopenfilename
-    from tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar, \
+    from tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar,
                          Toplevel, TRUE, FALSE)
 
 from PIL import ImageTk
@@ -124,8 +124,9 @@ class FootprintsUI(object):
         self.config = Config()
         self.master = master
         self.master.resizable(width=FALSE, height=FALSE)
-        self.master.title('STScI JWST/NIRspec visualization tool')
-        self.background = ImageTk.PhotoImage(file=os.path.join(PKG_DATA_DIR, "back-04.png"))
+        self.master.title('NIRspec Observation Visualization Tool')
+        self.background = ImageTk.PhotoImage(
+            file=os.path.join(PKG_DATA_DIR, "background.png"))
 
         w = self.background.width()
         h = self.background.height()
@@ -150,115 +151,118 @@ class FootprintsUI(object):
         self.collongVar = StringVar()
         self.collongVar.set(self.config['color_long'])
 
-        # assigning values to ds9 variable
-
-        self.ds9cmapVar = StringVar()
-        self.ds9cmapVar.set(self.config['cmap'])
-        self.ds9limminVar = StringVar()
-        self.ds9limminVar.set(self.config['lim_min'])
-        self.ds9limmaxVar = StringVar()
-        self.ds9limmaxVar.set(self.config['lim_max'])
-        self.ds9scaleVar = StringVar()
-        self.ds9scaleVar.set(self.config['scale'])
+        self.readfitsimageVar = StringVar()
+        self.readfitsimageVar.set(self.config['readfitsimage'])
+        # print(readfitsimageVar)
 
         self.labplotsources = Label(self.master, text=" Catalog on ?")
-        self.labplotsources.place(relx=0.65, rely=0.20, anchor="w")
+        self.labplotsources.place(relx=0.44, rely=0.26, anchor="w")
         self.plotsourcesVar = StringVar()
         self.plotsourcesVar.set(self.config['plot_src'])
         self.pt = OptionMenu(self.master, self.plotsourcesVar, 'Yes', 'No')
-        self.pt.place(relx=0.35, rely=0.20, anchor="w")
+        self.pt.place(relx=0.29, rely=0.26, anchor="w")
 
         self.labplotmsa = Label(self.master, text="MSA footprint on ?")
-        self.labplotmsa.place(relx=0.65, rely=0.34, anchor="w")
+        self.labplotmsa.place(relx=0.65, rely=0.38, anchor="w")
         self.plotmsaVar = StringVar()
         self.plotmsaVar.set(self.config['plot_msa'])
         self.pt = OptionMenu(self.master, self.plotmsaVar, 'Yes', 'No')
-        self.pt.place(relx=0.35, rely=0.34, anchor="w")
+        self.pt.place(relx=0.35, rely=0.38, anchor="w")
+
+        self.colmsaVar = StringVar()
+        self.colmsaVar.set(self.config['color_msa'])
+        self.colmsa = OptionMenu(
+            self.master, self.colmsaVar, 'Red', 'Cyan', 'Blue', 'Yellow', 'Green')
+        self.colmsa.config(width=9)
+        self.colmsa.place(relx=0.49, rely=0.38, anchor="w")
 
         self.labramsa = Label(self.master, text="RA center of MSA")
-        self.labramsa.place(relx=0.65, rely=0.38, anchor="w")
+        self.labramsa.place(relx=0.65, rely=0.42, anchor="w")
         self.ramsaVar = StringVar()
         self.ramsaVar.set(self.config['ra_nirspec'])
         self.ramsa = Entry(self.master, textvariable=self.ramsaVar)
-        self.ramsa.place(relx=0.35, rely=0.38, anchor="w")
+        self.ramsa.place(relx=0.35, rely=0.42, anchor="w")
 
         self.ramsa_ttp = CreateToolTip(self.ramsa,
-                                       'Enter RA value in degrees')
+                                       'Enter RA value.\nxxx.xxxx (degrees)\nhh mm ss.sss')
 
         self.labdecmsa = Label(self.master, text="DEC center of MSA")
-        self.labdecmsa.place(relx=0.65, rely=0.42, anchor="w")
+        self.labdecmsa.place(relx=0.65, rely=0.46, anchor="w")
         self.decmsaVar = StringVar()
         self.decmsaVar.set(self.config['dec_nirspec'])
         self.decmsa = Entry(self.master, textvariable=self.decmsaVar)
-        self.decmsa.place(relx=0.35, rely=0.42, anchor="w")
+        self.decmsa.place(relx=0.35, rely=0.46, anchor="w")
         self.decmsa_ttp = CreateToolTip(self.decmsa,
-                                        'Enter DEC value in degrees')
+                                        'Enter DEC value.\nxxx.xxxx (degrees)\nhh mm ss.sss')
 
         self.labthmsa = Label(self.master, text="MSA aperture PA")
-        self.labthmsa.place(relx=0.65, rely=0.46, anchor="w")
+        self.labthmsa.place(relx=0.65, rely=0.50, anchor="w")
         self.thmsaVar = StringVar()
         self.thmsaVar.set(self.config['theta_nirspec'])
         self.thmsa = Entry(self.master, textvariable=self.thmsaVar)
-        self.thmsa.place(relx=0.35, rely=0.46, anchor="w")
+        self.thmsa.place(relx=0.35, rely=0.50, anchor="w")
         self.thmsa_ttp = CreateToolTip(self.thmsa,
                                        'Enter MSA Aperture PA value in degrees')
 
         self.labplotshort = Label(self.master, text="Short channel on ?")
-        self.labplotshort.place(relx=0.65, rely=0.57, anchor="w")
+        self.labplotshort.place(relx=0.65, rely=0.61, anchor="w")
         self.plotshortVar = StringVar()
         self.plotshortVar.set(self.config['plot_short'])
         self.pt = OptionMenu(self.master, self.plotshortVar, 'Yes', 'No')
-        self.pt.place(relx=0.35, rely=0.57, anchor="w")
+        self.pt.config(width=8)
+        self.pt.place(relx=0.35, rely=0.61, anchor="w")
 
         self.labplotlong = Label(self.master, text="Long channel on ?")
-        self.labplotlong.place(relx=0.65, rely=0.61, anchor="w")
+        self.labplotlong.place(relx=0.65, rely=0.65, anchor="w")
         self.plotlongVar = StringVar()
         self.plotlongVar.set(self.config['plot_long'])
         self.pt = OptionMenu(self.master, self.plotlongVar, 'Yes', 'No')
-        self.pt.place(relx=0.35, rely=0.61, anchor="w")
+        self.pt.config(width=8)
+        self.pt.place(relx=0.35, rely=0.65, anchor="w")
 
         self.labranrcm = Label(self.master, text="RA center of NIRCam")
-        self.labranrcm.place(relx=0.65, rely=0.65, anchor="w")
+        self.labranrcm.place(relx=0.65, rely=0.69, anchor="w")
         self.ranrcmVar = StringVar()
         self.ranrcmVar.set(self.config['ra_nircam'])
         self.ranrcm = Entry(self.master, textvariable=self.ranrcmVar)
-        self.ranrcm.place(relx=0.35, rely=0.65, anchor="w")
+        self.ranrcm.place(relx=0.35, rely=0.69, anchor="w")
         self.ranrcm_ttp = CreateToolTip(self.ranrcm,
-                                        'Enter RA value in degrees')
+                                        'Enter RA value.\nxxx.xxxx (degrees)\nhh mm ss.sss')
 
         self.labdecnrcm = Label(self.master, text="DEC center of NIRCam")
-        self.labdecnrcm.place(relx=0.65, rely=0.69, anchor="w")
+        self.labdecnrcm.place(relx=0.65, rely=0.73, anchor="w")
         self.decnrcmVar = StringVar()
         self.decnrcmVar.set(self.config['dec_nircam'])
         self.decnrcm = Entry(self.master, textvariable=self.decnrcmVar)
-        self.decnrcm.place(relx=0.35, rely=0.69, anchor="w")
+        self.decnrcm.place(relx=0.35, rely=0.73, anchor="w")
         self.decnrcm_ttp = CreateToolTip(self.decnrcm,
-                                         'Enter DEC value in degrees')
+                                         'Enter DEC value.\nxxx.xxxx (degrees)\nhh mm ss.sss')
         self.labthnrcm = Label(self.master, text="NIRCam aperture PA")
-        self.labthnrcm.place(relx=0.65, rely=0.73, anchor="w")
+        self.labthnrcm.place(relx=0.65, rely=0.77, anchor="w")
         self.thnrcmVar = StringVar()
         self.thnrcmVar.set(self.config['theta_nircam'])
         self.thnrcm = Entry(self.master, textvariable=self.thnrcmVar)
-        self.thnrcm.place(relx=0.35, rely=0.73, anchor="w")
+        self.thnrcm.place(relx=0.35, rely=0.77, anchor="w")
         self.thnrcm_ttp = CreateToolTip(self.thnrcm,
                                         'Enter NIRCam Aperture PA value in degrees')
 
         self.labdither = Label(self.master, text="NIRCam dither pattern")
-        self.labdither.place(relx=0.35, rely=0.77, anchor="w")
+        self.labdither.place(relx=0.02, rely=0.81, anchor="w")
         self.ditherVar = StringVar()
         self.ditherVar.set(self.config['dither'])
-        self.pt = OptionMenu(self.master, self.ditherVar, 'None', 'Three', 'Threetight', 'Six')
-        self.pt.place(relx=0.65, rely=0.77, anchor="w")
+        self.pt = OptionMenu(self.master, self.ditherVar,
+                             'None', 'FULL3', 'FULL3TIGHT', 'FULL6')
+        self.pt.place(relx=0.35, rely=0.81, anchor="w")
 
         self.labmosaic = Label(self.master, text="NIRCam mosaic")
-        self.labmosaic.place(relx=0.35, rely=0.81, anchor="w")
+        self.labmosaic.place(relx=0.02, rely=0.87, anchor="w")
         self.mosaicVar = StringVar()
         self.mosaicVar.set(self.config['mosaic'])
         self.pt = OptionMenu(self.master, self.mosaicVar, 'No', 'Yes')
-        self.pt.place(relx=0.65, rely=0.81, anchor="w")
+        self.pt.place(relx=0.35, rely=0.87, anchor="w")
 
         self.laboffhor = Label(self.master, text="Offset")
-        self.laboffhor.place(relx=0.35, rely=0.85, anchor="w")
+        self.laboffhor.place(relx=0.50, rely=0.85, anchor="w")
         self.offhorVar = StringVar()
         self.offhorVar.set(self.config['off_h'])
         self.offhor = Entry(self.master, textvariable=self.offhorVar)
@@ -267,52 +271,116 @@ class FootprintsUI(object):
                                         'Enter NIRCam offset in arcsec')
 
         self.laboffver = Label(self.master, text="Offset")
-        self.laboffver.place(relx=0.35, rely=0.89, anchor="w")
+        self.laboffver.place(relx=0.50, rely=0.89, anchor="w")
         self.offverVar = StringVar()
         self.offverVar.set(self.config['off_v'])
         self.offver = Entry(self.master, textvariable=self.offverVar)
         self.offver.place(relx=0.65, rely=0.89, anchor="w")
         self.offver_ttp = CreateToolTip(self.offver,
                                         'Enter NIRCam offset in arcsec')
+
         self.ptVar = StringVar()
         self.ptVar.set('footprints')
 
-        self.b5 = Button(self.master, text=" Select File ", command=self.readfitsfilename)
-        self.b5.place(relx=0.65, rely=0.15, anchor="w")
+        self.b5 = Button(self.master, text=" Select File ",
+                         command=self.readfitsfilename)
+        self.b5.place(relx=0.43, rely=0.12, anchor="w")
 
         self.fileVar = StringVar()
         self.fileVar.set(self.config['fits_name'])
-        self.filevalue = Entry(self.master, textvariable=self.fileVar, width=40, justify='right')
+        self.filevalue = Entry(
+            self.master, textvariable=self.fileVar, width=40, justify='left')
         self.filevalue.place(relx=0.02, rely=0.15, anchor="w")
 
-        self.b6 = Button(self.master, text=" Select File ", command=self.readcataloguename)
-        self.b6.place(relx=0.65, rely=0.24, anchor="w")
+        self.b6 = Button(self.master, text=" Select File ",
+                         command=self.readcataloguename)
+        self.b6.place(relx=0.43, rely=0.295, anchor="w")
         self.catVar = StringVar()
         self.catVar.set(self.config['cat_name'])
-        self.catvalue = Entry(self.master, textvariable=self.catVar, width=40, justify='right')
-        self.catvalue.place(relx=0.02, rely=0.24, anchor="w")
+        self.catvalue = Entry(
+            self.master, textvariable=self.catVar, width=28, justify='left')
+        self.catvalue.place(relx=0.02, rely=0.295, anchor="w")
 
-        self.b7 = Button(self.master, text="View timeline", command=self.maketimeline)
+        self.b7 = Button(self.master, text="View Timeline",
+                         command=self.maketimeline)
         self.b7.place(relx=0.6, rely=0.96, anchor="w")
         self.b3 = Button(self.master, text=" Quit ", command=self.quit)
         self.b3.place(relx=0.2, rely=0.96, anchor="w")
 
-        self.b4 = Button(self.master, text=" Display ", command=self.makefootprints)
+        self.b4 = Button(self.master, text=" Display ",
+                         command=self.makefootprints)
         self.b4.place(relx=0.8, rely=0.96, anchor="w")
+
+        self.outdirVar = StringVar()
+        self.outdirVar.set(self.config['out_dir'])
+        self.outdirvalue = Entry(
+            self.master, textvariable=self.outdirVar, width=40, justify='left')
+        self.outdirvalue.place(relx=0.02, rely=0.219, anchor="w")
+        # self.laboutdir = Label(self.master, text="Output directory")
+        # self.laboutdir.place(relx=0.02, rely=0.25, anchor="w")
+
+        self.colshortVar = StringVar()
+        self.colshortVar.set(self.config['color_short'])
+        self.colshort = OptionMenu(
+            self.master, self.colshortVar, 'Green', 'Cyan', 'Blue', 'Yellow', 'Red')
+        self.colshort.config(width=9)
+        self.colshort.place(relx=0.49, rely=0.61, anchor="w")
+
+        self.collongVar = StringVar()
+        self.collongVar.set(self.config['color_long'])
+        self.collong = OptionMenu(
+            self.master, self.collongVar, 'Blue', 'Cyan', 'Green', 'Yellow', 'Red')
+        self.collong.config(width=9)
+        self.collong.place(relx=0.49, rely=0.65, anchor="w")
+
+        self.labcmap = Label(self.master, text="Colour Map")
+        self.labcmap.place(relx=0.65, rely=0.18, anchor="w")
+        self.ds9cmapVar = StringVar()
+        self.ds9cmapVar.set(self.config['cmap'])
+        self.ds9cmap = OptionMenu(
+            self.master, self.ds9cmapVar, 'grey', 'red', 'green', 'blue', 'heat')
+        self.ds9cmap.place(relx=0.80, rely=0.18, anchor="w")
+        self.ds9cmap.config(width=10)
+
+        self.labscale = Label(self.master, text="Scale")
+        self.labscale.place(relx=0.65, rely=0.21, anchor="w")
+        self.ds9scaleVar = StringVar()
+        self.ds9scaleVar.set(self.config['scale'])
+        self.ds9scale = OptionMenu(
+            self.master, self.ds9scaleVar, 'log', 'linear', 'power', 'sqrt', 'zscale', 'minmax')
+        self.ds9scale.place(relx=0.80, rely=0.21, anchor="w")
+        self.ds9scale.config(width=10)
+
+        self.ds9limmin = Label(self.master, text="Low")
+        self.ds9limmin.place(relx=0.65, rely=0.24, anchor="w")
+        self.ds9limminVar = StringVar()
+        self.ds9limminVar.set(self.config['lim_min'])
+        self.ds9limmin = Entry(self.master, textvariable=self.ds9limminVar)
+        self.ds9limmin.place(relx=0.80, rely=0.24, anchor="w")
+        self.ds9limmin.config(width=10)
+
+        self.ds9limmax = Label(self.master, text="High")
+        self.ds9limmax.place(relx=0.65, rely=0.27, anchor="w")
+        self.ds9limmaxVar = StringVar()
+        self.ds9limmaxVar.set(self.config['lim_max'])
+        self.ds9limmax = Entry(self.master, textvariable=self.ds9limmaxVar)
+        self.ds9limmax.place(relx=0.80, rely=0.27, anchor="w")
+        self.ds9limmax.config(width=10)
 
     def quit(self):
         self.config['fits_name'] = self.fileVar.get()
         self.config['cat_name'] = self.catVar.get()
+        self.config['out_dir'] = os.path.abspath(self.outdirVar.get())
         self.config['plot_long'] = self.plotlongVar.get()
         self.config['plot_short'] = self.plotshortVar.get()
         self.config['plot_msa'] = self.plotmsaVar.get()
         self.config['plot_src'] = self.plotsourcesVar.get()
-        self.config['ra_nircam'] = float(self.ranrcmVar.get())
-        self.config['dec_nircam'] = float(self.decnrcmVar.get())
+        self.config['ra_nircam'] = self.ranrcmVar.get()
+        self.config['dec_nircam'] = self.decnrcmVar.get()
         self.config['theta_nircam'] = float(self.thnrcmVar.get())
         self.config['dither'] = self.ditherVar.get()
-        self.config['ra_nirspec'] = float(self.ramsaVar.get())
-        self.config['dec_nirspec'] = float(self.decmsaVar.get())
+        self.config['ra_nirspec'] = self.ramsaVar.get()
+        self.config['dec_nirspec'] = self.decmsaVar.get()
         self.config['theta_nirspec'] = float(self.thmsaVar.get())
         self.config['mosaic'] = self.mosaicVar.get()
         self.config['off_h'] = float(self.offhorVar.get())
@@ -330,19 +398,19 @@ class FootprintsUI(object):
 
     def makefootprints(self):
         if self.ptVar.get() == 'footprints':
-            print(self.catVar.get())
+            # print(self.catVar.get())
             footprints(self.fileVar.get(),
                        self.catVar.get(),
                        self.plotlongVar.get(),
                        self.plotshortVar.get(),
                        self.plotmsaVar.get(),
                        self.plotsourcesVar.get(),
-                       float(self.ranrcmVar.get()),
-                       float(self.decnrcmVar.get()),
+                       self.ranrcmVar.get(),
+                       self.decnrcmVar.get(),
                        float(self.thnrcmVar.get()),
                        self.ditherVar.get(),
-                       float(self.ramsaVar.get()),
-                       float(self.decmsaVar.get()),
+                       self.ramsaVar.get(),
+                       self.decmsaVar.get(),
                        float(self.thmsaVar.get()),
                        self.mosaicVar.get(),
                        self.offhorVar.get(),
@@ -353,7 +421,9 @@ class FootprintsUI(object):
                        self.ds9cmapVar.get(),
                        self.ds9limminVar.get(),
                        self.ds9limmaxVar.get(),
-                       self.ds9scaleVar.get())
+                       self.ds9scaleVar.get(),
+                       self.outdirVar.get())
+            # self.readfitsimageVar.get())
 
     def readcataloguename(self):
         Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
@@ -363,30 +433,35 @@ class FootprintsUI(object):
                                    filetypes=(('RADEC files', '*.radec'),
                                               ('all files', '*.*')))
 
-        print(filename)
+        # print(filename)
         self.catVar.set(filename)
 
-        catvalue = Entry(self.master, textvariable=self.catVar, width=40, justify='right')
+        catvalue = Entry(self.master, textvariable=self.catVar,
+                         width=28, justify='right')
         catvalue.place(relx=0.02, rely=0.24, anchor="w")
 
     def readfitsfilename(self):
+        # readfitsimage =True     # set variable to read new image
+
         Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
         # show an "Open" dialog box and return the path to the selected file
         filename = askopenfilename(initialdir=os.path.abspath(os.curdir),
                                    title='Select FITS file',
                                    filetypes=(('FITS files', '*.fits'),
                                               ('all files', '*.*')))
-        print(filename)
+        # print(filename)
         self.fileVar.set(filename)
 
-        filevalue = Entry(self.master, textvariable=self.fileVar, width=40, justify='right')
+        filevalue = Entry(self.master, textvariable=self.fileVar,
+                          width=40, justify='right')
         filevalue.place(relx=0.02, rely=0.15, anchor="w")
 
     def maketimeline(self):
-        print(self.ramsaVar.get())
-        plottimeline(float(self.ramsaVar.get()),
-                     float(self.decmsaVar.get()),
-                     float(self.thmsaVar.get()))
+        # print(self.ramsaVar.get())
+        plottimeline(self.ramsaVar.get(),
+                     self.decmsaVar.get(),
+                     float(self.thmsaVar.get()),
+                     self.outdirVar.get())
 
 
 def main():

@@ -86,7 +86,7 @@ def allowed_max_vehicle_roll(sun_ra, sun_dec, ra, dec):
     return max_vehicle_roll
 
 
-def rollangle(ra, dec):
+def rollangle(ra, dec, outdir):
     NRCALL_FULL_V2IdlYang = -0.0265
     NRS_FULL_MSA_V3IdlYang = 137.4874
     NIS_V3IdlYang = -0.57
@@ -95,7 +95,8 @@ def rollangle(ra, dec):
 
     ECL_FLAG = False
 
-    A_eph = EPH.Ephemeris(os.path.join(PKG_DATA_DIR, "horizons_EM_L2_wrt_Sun_2018_2022.txt"), ECL_FLAG)
+    A_eph = EPH.Ephemeris(os.path.join(
+        PKG_DATA_DIR, "horizons_EM_L2_wrt_Sun_2018_2022.txt"), ECL_FLAG)
 
     # search_start = 58484.00000000  #Jan 1, 2019
     search_start = 58392.00000000  # Oct 1, 2018         LEONARDO
@@ -136,7 +137,7 @@ def rollangle(ra, dec):
     # regard.
     for i in range(1, span * scale + 1):
         adate = search_start + float(i) / float(scale)
-        #iflag = A_eph.in_FOR(adate,ra,dec)
+        # iflag = A_eph.in_FOR(adate,ra,dec)
         if pa == "X":
             iflag = A_eph.in_FOR(adate, ra, dec)
         else:
@@ -163,12 +164,12 @@ def rollangle(ra, dec):
                     else:
                         pa_start = pa
                         pa_end = pa
-                   # print "%13.5f %13.5f %11.2f %13.5f %13.5f %13.5f %13.5f "
-                   # %
-                   # (wstart,wend,wend-wstart,pa_start*R2D,pa_end*R2D,ra*R2D,dec*R2D)
+                    # print "%13.5f %13.5f %11.2f %13.5f %13.5f %13.5f %13.5f "
+                    # %
+                    # (wstart,wend,wend-wstart,pa_start*R2D,pa_end*R2D,ra*R2D,dec*R2D)
             iflag_old = iflag
 
-    if iflip == True and iflag == True:
+    if iflip and iflag:
         if pa == "X":
             pa_start = A_eph.normal_pa(twstart, ra, dec)
             pa_end = A_eph.normal_pa(adate, ra, dec)
@@ -194,94 +195,100 @@ def rollangle(ra, dec):
         tgt_is_in = False
         if iflag:
             tgt_is_in = True
-        print()
-        print()
+        # print()
+        # print()
         # print "             V3PA          NIRCam           NIRSpec         NIRISS           MIRI          FGS"
         # print "   MJD    min    max      min    max      min    max      min    max      min    max      min    max"
         # 58849.0 264.83 275.18 264.80 264.80  42.32  42.32 264.26 264.26
         # 269.84 269.84 263.58 263.58
+        # verify that outdir exists
 
-        outputfile = 'nirspec_nircam.txt'
-        file = open(outputfile, "w")
-        # pos = 0
-        # for i in range(0,napertures):
-        #        newline = 'polygon '+ str(x[pos])+ '  '+ str(y[pos])+ '  '+ str(x[pos+1])+ '  '+ str(y[pos+1])+ '  '+ str(x[pos+2])+ '  '+ str(y[pos+2])+ '  '+ str(x[pos+3])+ '  '+ str(y[pos+3])+ '  '+ str(x[pos+4])+ '  '+ str(y[pos+4])+ '  ' +  '# text={}'+'\n'
-        #        file.write(newline)
-        #        pos = pos + 5
+        if not os.path.exists(outdir):
+            os.makedirs(outdir, mode=0o0755)
+            print("creating directory {}".format(outdir))
 
-        for itime in range(istart, iend):
-            atime = float(itime)
-            iflag = A_eph.in_FOR(atime, ra, dec)
-            # print atime,A_eph.in_FOR(atime,ra,dec)
-            if iflag:
-                if not tgt_is_in:
-                    print()
-                tgt_is_in = True
+        outputfile = os.path.join(outdir, 'v3pa_nircam_nirspec.txt')
+        print(outputfile)
 
-                V3PA = A_eph.normal_pa(atime, ra, dec) * R2D
-                (sun_ra, sun_dec) = A_eph.sun_pos(atime)
-                max_boresight_roll = allowed_max_vehicle_roll(
-                    sun_ra, sun_dec, ra, dec) * R2D
+        with open(outputfile, "w") as fp:
+            # pos = 0
+            # for i in range(0,napertures):
+            #        newline = 'polygon '+ str(x[pos])+ '  '+ str(y[pos])+ '  '+ str(x[pos+1])+ '  '+ str(y[pos+1])+ '  '+ str(x[pos+2])+ '  '+ str(y[pos+2])+ '  '+ str(x[pos+3])+ '  '+ str(y[pos+3])+ '  '+ str(x[pos+4])+ '  '+ str(y[pos+4])+ '  ' +  '# text={}'+'\n'
+            #        fp.write(newline)
+            #        pos = pos + 5
 
-                minV3PA = bound_angle(V3PA - max_boresight_roll)
-                maxV3PA = bound_angle(V3PA + max_boresight_roll)
-                # minNIRCam_PA = bound_angle(V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
-                # maxNIRCam_PA = bound_angle(V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
-                # minNIRSpec_PA = bound_angle(V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
-                # maxNIRSpec_PA = bound_angle(V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
-                # minNIRISS_PA = bound_angle(V3PA - max_boresight_roll + NIS_V3IdlYang)
-                # maxNIRISS_PA = bound_angle(V3PA - max_boresight_roll + NIS_V3IdlYang)
-                # minMIRI_PA = bound_angle(V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
-                # maxMIRI_PA = bound_angle(V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
-                # minFGS_PA = bound_angle(V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
-                # maxFGS_PA = bound_angle(V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
+            for itime in range(istart, iend):
+                atime = float(itime)
+                iflag = A_eph.in_FOR(atime, ra, dec)
+                # print atime,A_eph.in_FOR(atime,ra,dec)
+                if iflag:
+                    if not tgt_is_in:
+                        print()
+                    tgt_is_in = True
 
-                minNIRCam_PA = bound_angle(
-                    V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
-                maxNIRCam_PA = bound_angle(
-                    V3PA + max_boresight_roll + NRCALL_FULL_V2IdlYang)
-                minNIRSpec_PA = bound_angle(
-                    V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
-                maxNIRSpec_PA = bound_angle(
-                    V3PA + max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
-                minNIRISS_PA = bound_angle(
-                    V3PA - max_boresight_roll + NIS_V3IdlYang)
-                maxNIRISS_PA = bound_angle(
-                    V3PA + max_boresight_roll + NIS_V3IdlYang)
-                minMIRI_PA = bound_angle(
-                    V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
-                maxMIRI_PA = bound_angle(
-                    V3PA + max_boresight_roll + MIRIM_FULL_V3IdlYang)
-                minFGS_PA = bound_angle(
-                    V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
-                maxFGS_PA = bound_angle(
-                    V3PA + max_boresight_roll + FGS1_FULL_V3IdlYang)
+                    V3PA = A_eph.normal_pa(atime, ra, dec) * R2D
+                    (sun_ra, sun_dec) = A_eph.sun_pos(atime)
+                    max_boresight_roll = allowed_max_vehicle_roll(
+                        sun_ra, sun_dec, ra, dec) * R2D
 
-                # print '%7.1f %6.2f %6.2f %6.2f' % (atime, V3PA, NIRCam_PA,
-                # NIRSpec_PA)
-                fmt = '%7.1f' + '   %6.2f %6.2f' * 6
-                print(
-                    fmt %
-                    (atime,
-                     minV3PA,
-                     maxV3PA,
-                     minNIRCam_PA,
-                     maxNIRCam_PA,
-                     minNIRSpec_PA,
-                     maxNIRSpec_PA,
-                     minNIRISS_PA,
-                     maxNIRISS_PA,
-                     minMIRI_PA,
-                     maxMIRI_PA,
-                     minFGS_PA,
-                     maxFGS_PA))
-                newline = str(atime) + '  ' + str(minNIRCam_PA) + '  ' + str(maxNIRCam_PA) + \
-                    '  ' + str(minNIRSpec_PA) + '  ' + \
-                    str(maxNIRSpec_PA) + '  \n'
-                file.write(newline)
+                    minV3PA = bound_angle(V3PA - max_boresight_roll)
+                    maxV3PA = bound_angle(V3PA + max_boresight_roll)
+                    # minNIRCam_PA = bound_angle(V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
+                    # maxNIRCam_PA = bound_angle(V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
+                    # minNIRSpec_PA = bound_angle(V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
+                    # maxNIRSpec_PA = bound_angle(V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
+                    # minNIRISS_PA = bound_angle(V3PA - max_boresight_roll + NIS_V3IdlYang)
+                    # maxNIRISS_PA = bound_angle(V3PA - max_boresight_roll + NIS_V3IdlYang)
+                    # minMIRI_PA = bound_angle(V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
+                    # maxMIRI_PA = bound_angle(V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
+                    # minFGS_PA = bound_angle(V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
+                    # maxFGS_PA = bound_angle(V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
 
-            else:
-                tgt_is_in = False
+                    minNIRCam_PA = bound_angle(
+                        V3PA - max_boresight_roll + NRCALL_FULL_V2IdlYang)
+                    maxNIRCam_PA = bound_angle(
+                        V3PA + max_boresight_roll + NRCALL_FULL_V2IdlYang)
+                    minNIRSpec_PA = bound_angle(
+                        V3PA - max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
+                    maxNIRSpec_PA = bound_angle(
+                        V3PA + max_boresight_roll + NRS_FULL_MSA_V3IdlYang)
+                    minNIRISS_PA = bound_angle(
+                        V3PA - max_boresight_roll + NIS_V3IdlYang)
+                    maxNIRISS_PA = bound_angle(
+                        V3PA + max_boresight_roll + NIS_V3IdlYang)
+                    minMIRI_PA = bound_angle(
+                        V3PA - max_boresight_roll + MIRIM_FULL_V3IdlYang)
+                    maxMIRI_PA = bound_angle(
+                        V3PA + max_boresight_roll + MIRIM_FULL_V3IdlYang)
+                    minFGS_PA = bound_angle(
+                        V3PA - max_boresight_roll + FGS1_FULL_V3IdlYang)
+                    maxFGS_PA = bound_angle(
+                        V3PA + max_boresight_roll + FGS1_FULL_V3IdlYang)
 
-        file.close()
+                    # fmt = '%7.1f' + '   %6.2f %6.2f' * 6
+                    # print(
+                    #    fmt %
+                    #    (atime,
+                    #     minV3PA,
+                    #     maxV3PA,
+                    #     minNIRCam_PA,
+                    #     maxNIRCam_PA,
+                    #     minNIRSpec_PA,
+                    #     maxNIRSpec_PA,
+                    #     minNIRISS_PA,
+                    #     maxNIRISS_PA,
+                    #     minMIRI_PA,
+                    #     maxMIRI_PA,
+                    #     minFGS_PA,
+                    #     maxFGS_PA))
+                    newline = str(atime) + '   ' + str(minV3PA) + \
+                        ' ' + str(maxV3PA) + '  ' + str(minNIRCam_PA) + \
+                        '  ' + str(maxNIRCam_PA) + '  ' + str(minNIRSpec_PA) + \
+                        '  ' + str(maxNIRSpec_PA) + '  \n'
+
+                    fp.write(newline)
+
+                else:
+                    tgt_is_in = False
+
     return ra, dec
