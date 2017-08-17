@@ -6,6 +6,7 @@ import math
 #from . import quaternionx
 from . import math_extensionsx as math2
 
+
 class GalacticPole (object):
     """Represents coordinates of galactic pole."""
 

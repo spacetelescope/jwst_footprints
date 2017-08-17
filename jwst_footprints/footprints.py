@@ -2,16 +2,27 @@
 # encoding: utf-8
 
 """
-footprints_leonardo.py
-
 Created by Leonardo Ubeda on 14JUL2016
 reads tables produced by
-
 footprints_create_apertures-00.py
-
-and then produces region files and displays them in ds9
-
+and then produces region files and displays them in DS9
 Based on work by Colin Cox and Wayne Kinzel
+Updated by Joseph Hunkeler
+
+
+
+version history
+
+2.2      14JUN2017      DS9 parameters in GUI
+                        output directory
+                        region files colours
+2.0      06JUN2017      major update by Joseph Hunkeler
+                        code ported to Python 3
+                        compatible with Python 2.7
+1.2      26MAY2017      added hhmmss format for RA
+                        added ddmmss format for DEC
+                        changed the naming convention of dither patterns to FULL3 FULL3TIGHT FULL6
+1.0      14JUL2016      first virsion
 
 """
 
@@ -25,7 +36,15 @@ from math import *
 from astropy import wcs
 from astropy.io import fits
 from astropy.io import ascii
+from astropy import units as u
+from astropy.coordinates import SkyCoord
+import pyds9
 from . import PKG_DATA_DIR
+
+#readfitsimage = True
+#self.readfitsimageVar = StringVar()
+# self.readfitsimageVar.set(self.config['readfitsimage'])
+# print(readfitsimageVar)
 
 
 def arcsec2deg(ra, dec, v2arcsec, v3arcsec, xr, yr):
@@ -237,7 +256,7 @@ def create_footprint(inputfile, ra, dec, napertures, footprintname, color):
     # short = 8, MSA = 4)
 
     nrows = napertures * 5
-    print(nrows)
+    # print(nrows)
     ra = np.array(ra, np.float_)  # np.array(ra, np.float_)
     dec = np.array(dec, np.float_)  # np.array(dec, np.float_)
     world = []
@@ -283,14 +302,14 @@ def create_footprint(inputfile, ra, dec, napertures, footprintname, color):
 #------------------------------
 def create_footprint_center(inputfile, ra, dec, footprintname, color):
     global w
-    # input
 
+    '''
     # ra = ra in degrees
     # dec = dec in degrees
     # footprintname is the name of the output file
     # napertures = number of apertures in footprint ( Nircam LONG = 2, NIRCam
     # short = 8, MSA = 4)
-
+    '''
     ra = np.array(ra, np.float_)
     dec = np.array(dec, np.float_)
     world = []
@@ -315,11 +334,13 @@ def create_footprint_center(inputfile, ra, dec, footprintname, color):
     file.close()
 
 #------------------------------
+
+
 def read_table(inputfile, delim=' '):
     records = []
     with open(inputfile, 'r') as fp:
         for row in fp:
-            cols = [ x for x in row.strip().split(delim) if x ]
+            cols = [x for x in row.strip().split(delim) if x]
             records.append(cols)
 
     return list(zip(*records))
@@ -331,12 +352,12 @@ def footprints(inputfile,
                plot_short='No',
                plot_msa='No',
                plot_sources='No',
-               ra_long=202.47,
-               dec_long=47.2,
+               ra_long='202.47',
+               dec_long='47.2',
                theta_long=0.0,
                dither_pattern_long='No',
-               ra_msa=202.47,
-               dec_msa=47.2,
+               ra_msa='202.47',
+               dec_msa='47.2',
                theta_msa=0.0,
                mosaic='No',
                usershiftv2=0.0,
@@ -347,8 +368,16 @@ def footprints(inputfile,
                ds9cmap='grey',
                ds9limmin=0.0,
                ds9limmax=30.0,
-               ds9scale='log'):
+               ds9scale='log',
+               outdir='/Users/myname/Desktop/'):
+               # readfitsimage=True):
 
+    # verify that outdir exists
+    if not os.path.exists(outdir):
+        os.makedirs(outdir, mode=0o0755)
+        print("creating directory " + outdir)
+
+    # print(outdir)
     global w
 
     usershiftv2 = np.array(usershiftv2, np.float_)
@@ -362,36 +391,33 @@ def footprints(inputfile,
 
     # read image and its header
     # need to extend this to multi extension fits files
+    # print(readfitsimage)
+    # print('reading fits')
     hdulist = fits.open(inputfile)
-    w = wcs.WCS(hdulist[0].header)
-    print(w)
-    # verify that wcs is working
-    try:
-        pixcrd2 = w.wcs_world2pix([(0.0, 0.0)], 1)
-
-    except ValueError:
-        print('FITS file is not valid')
-    else:
-        print('Valid FITS file')
-        print(pixcrd2)
+    w = wcs.WCS(hdulist[0].header)    # assuming WCS is in extension 0
+    '''
+    if readfitsimage:
+        print('reading fits')
+        hdulist = fits.open(inputfile)
+        w = wcs.WCS(hdulist[0].header)    # assuming WCS is in extension 0
+        readfitsimage = False
+        readfitsimage = False
+    '''
 
     if plot_sources == 'Yes':
         print('creating region file from source list')
         # here we read the list ra dec and create a DS9 region file
         data = ascii.read(sourcelist)
-        # print data['col1']
-        # print len(data)
-        # print data.info
         # this gives the number of columns in the input file
-        print(len(data.colnames))
+        # print(len(data.colnames))
 
         if len(data.colnames) == 2:
             flagsources = 2
             # in this case the user inputs ra dec
             ra = np.array(data['col1'], np.float_)
             dec = np.array(data['col2'], np.float_)
-            print(ra)
-            print(dec)
+            # print(ra)
+            # print(dec)
             world = []
             for i in range(len(ra)):
                 world.append((ra[i], dec[i]))
@@ -406,7 +432,7 @@ def footprints(inputfile,
             x = [float(i) for i in xwcs]
             y = [float(i) for i in ywcs]
 
-            outputfile = 'ds9-sources.reg'
+            outputfile = os.path.join(outdir, 'ds9-sources.reg')
             file = open(outputfile, "w")
             file.write(
                 'global color=yellow width=1 font="helvetica 15 normal roman"   select=0 highlite=1 \n')
@@ -425,9 +451,9 @@ def footprints(inputfile,
             ra = np.array(data['col1'], np.float_)
             dec = np.array(data['col2'], np.float_)
             sourcetype = data['col3']
-            print(ra)
-            print(dec)
-            print(sourcetype.info)
+            # print(ra)
+            # print(dec)
+            # print(sourcetype.info)
             # select sources according to type
             a = np.where(sourcetype == 'F')[0]  # fillers
             rafill = ra[a]
@@ -451,7 +477,7 @@ def footprints(inputfile,
             x = [float(i) for i in xwcs]
             y = [float(i) for i in ywcs]
 
-            outputfile = 'ds9-sources-fillers.reg'
+            outputfile = os.path.join(outdir, 'ds9-sources-fillers.reg')
             file = open(outputfile, "w")
             file.write(
                 'global color=yellow width=1 font="helvetica 15 normal roman"   select=0 highlite=1 \n')
@@ -479,7 +505,7 @@ def footprints(inputfile,
             x = [float(i) for i in xwcs]
             y = [float(i) for i in ywcs]
 
-            outputfile = 'ds9-sources-primary.reg'
+            outputfile = os.path.join(outdir, 'ds9-sources-primary.reg')
             file = open(outputfile, "w")
             file.write(
                 'global color=red width=1 font="helvetica 15 normal roman"  select=0  highlite=1 \n')
@@ -493,17 +519,35 @@ def footprints(inputfile,
             file.close()
         if len(data.colnames) < 2:
             print('Invalid input file')
-
-
-#sys.exit("quitting now...")
-
-    #-------------------------------------------------------------------
+#-------------------------------------------------------------------
     # nirspec msa
     if plot_msa == 'Yes':
         print('processing NIRSPEC MSA')
-        v2msa, v3msa, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nirspec-msa.txt'))
+        v2msa, v3msa, aper, v2ref, v3ref = read_table(
+            os.path.join(PKG_DATA_DIR, 'table-nirspec-msa.txt'))
         v2msa = np.array(v2msa, np.float_)
         v3msa = np.array(v3msa, np.float_)
+
+#---------------------------
+#  here i need to transform ra dec to float        06JUN2017  LEONARDO
+
+        print('using NIRSpec RA  :', ra_msa)
+        print('using NIRSpec DEC :', dec_msa)
+
+        if (' ' in ra_msa) and (' ' in dec_msa):
+            # it recognizes that the string has the format   hh mm ss.sss
+            b = ra_msa + ' ' + dec_msa
+            c = SkyCoord(b, unit=(u.hourangle, u.deg))
+            #   transform to degrees to be used in the rest of the code
+            ra = c.ra.deg
+            dec = c.dec.deg
+            ra_msa = np.array(ra, np.float_)
+            dec_msa = np.array(dec, np.float_)
+
+        else:  # string is in units of degrees
+            ra_msa = np.array(ra_msa, np.float_)
+            dec_msa = np.array(dec_msa, np.float_)
+#----------------------------------------------------------------------------
 
         x2 = v2msa
         x3 = v3msa
@@ -545,13 +589,19 @@ def footprints(inputfile,
         myv3 = np.array(myv3)
         # create_footprint(input,myv2,myv3,5,'ds9-msa.reg','red') # 5 because
         # is includes the IFU aperture
-        # 5 because is includes the IFU aperture
-        create_footprint(input, myv2, myv3, 5, 'ds9-msa.reg', colmsa)
+        # 5 because it includes the IFU aperture
+        create_footprint(
+            input,
+            myv2,
+            myv3,
+            5,
+            os.path.join(outdir, 'ds9-msa.reg'),
+            colmsa)
         create_footprint_center(
             input,
             ra_msa,
             dec_msa,
-            'ds9-msa-centre.reg',
+            os.path.join(outdir, 'ds9-msa-centre.reg'),
             colmsa)
 
     #-------------------------------------------------------------------
@@ -560,17 +610,39 @@ def footprints(inputfile,
     if plot_long == 'Yes':
         print('processing NIRCAM LWC')
 
+
+#--------------------------------------------------------------------------
+#  here i need to transform ra dec to float             06JUN2017  LEONARDO
+
+        print('using NIRCAm RA  :', ra_long)
+        print('using NIRCam DEC :', dec_long)
+
+        if (' ' in ra_long) and (' ' in dec_long):
+            # it recognizes that the string has the format   hh mm ss.sss
+            b = ra_long + ' ' + dec_long
+            c = SkyCoord(b, unit=(u.hourangle, u.deg))
+            #   transform to degrees to be used in the rest of the code
+            ra = c.ra.deg
+            dec = c.dec.deg
+            ra_long = np.array(ra, np.float_)
+            dec_long = np.array(dec, np.float_)
+
+        else:  # string is in units of degrees
+            ra_long = np.array(ra_long, np.float_)
+            dec_long = np.array(dec_long, np.float_)
+#----------------------------------------------------------------------------
         create_footprint_center(
             inputfile,
             ra_long,
             dec_long,
-            'ds9-long-centre.reg',
+            os.path.join(outdir, 'ds9-long-centre.reg'),
             collong)
-        v2c, v3c, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nircam-long.txt'))
+        v2c, v3c, aper, v2ref, v3ref = read_table(
+            os.path.join(PKG_DATA_DIR, 'table-nircam-long.txt'))
         v2_0 = np.array(v2c, np.float_)
         v3_0 = np.array(v3c, np.float_)
 
-        if dither_pattern_long == 'No' and mosaic == 'No':
+        if dither_pattern_long == 'None' and mosaic == 'No':
             #shiftv2 = [0.0, -58.0,  58.0]
             #shiftv3 = [0.0, -23.5,  23.5]
             v2 = v2_0
@@ -599,9 +671,14 @@ def footprints(inputfile,
                 myv3 = np.append(myv3, a[1])
             myv2 = np.array(myv2)
             myv3 = np.array(myv3)
-            create_footprint(inputfile, myv2, myv3, 2, 'ds9-long-no.reg', collong)
+            create_footprint(inputfile,
+                             myv2,
+                             myv3,
+                             2,
+                             os.path.join(outdir, 'ds9-long-no.reg'),
+                             collong)
 
-        if dither_pattern_long == 'Three' and mosaic == 'No':
+        if dither_pattern_long == 'FULL3' and mosaic == 'No':
             shiftv2 = [0.0, -58.0, 58.0]
             shiftv3 = [0.0, -23.5, 23.5]
             v2 = v2_0
@@ -635,10 +712,10 @@ def footprints(inputfile,
                 myv2,
                 myv3,
                 6,
-                'ds9-long-three.reg',
+                os.path.join(outdir, 'ds9-long-three.reg'),
                 collong)
 
-        if dither_pattern_long == 'Threetight' and mosaic == 'No':
+        if dither_pattern_long == 'FULL3TIGHT' and mosaic == 'No':
             shiftv2 = [0.0, -58.0, 58.0]
             shiftv3 = [0.0, -7.5, 7.5]
             v2 = v2_0
@@ -672,10 +749,10 @@ def footprints(inputfile,
                 myv2,
                 myv3,
                 6,
-                'ds9-long-threetight.reg',
+                os.path.join(outdir, 'ds9-long-threetight.reg'),
                 collong)
 
-        if dither_pattern_long == 'Six' and mosaic == 'No':
+        if dither_pattern_long == 'FULL6' and mosaic == 'No':
             shiftv2 = [-72.0, -43.0, -14.0, 15.0, 44.0, 73.0]
             shiftv3 = [-30.0, -18.0, -6.0, 6.0, 18.0, 30.0]
             # determine center of rotation
@@ -715,27 +792,24 @@ def footprints(inputfile,
                 myv2,
                 myv3,
                 12,
-                'ds9-long-six.reg',
+                os.path.join(outdir, 'ds9-long-six.reg'),
                 collong)
 
-
-#        print mosaic
-        if (dither_pattern_long == 'Three' or dither_pattern_long ==
-                'Threetight' or dither_pattern_long == 'No') and mosaic == 'Yes':
-            if dither_pattern_long == 'Three':
+        if (dither_pattern_long == 'FULL3' or dither_pattern_long ==
+                'FULL3TIGHT' or dither_pattern_long == 'None') and mosaic == 'Yes':
+            if dither_pattern_long == 'FULL3':
                 shiftv3 = [0.0, -23.5, 23.5, usershiftv3 + 0.0,
                            usershiftv3 - 23.5, usershiftv3 + 23.5]
-            if dither_pattern_long == 'Threetight':
+            if dither_pattern_long == 'FULL3TIGHT':
                 shiftv3 = [0.0, -7.5, 7.5, usershiftv3 + 0.0,
                            usershiftv3 - 7.5, usershiftv3 + 7.5]
 
             shiftv2 = [0.0, -58.0, 58.0, usershiftv2 + 0.0,
                        usershiftv2 - 58.0, usershiftv2 + 58.0]
-            if (dither_pattern_long == 'No'):
+            if (dither_pattern_long == 'None'):
                 shiftv3 = [0.0, usershiftv3 + 0.0]
                 shiftv2 = [0.0, usershiftv2 + 0.0]
 
-#          print shiftv3
             v2 = v2_0
             v3 = v3_0
             # determine center of rotation
@@ -761,7 +835,6 @@ def footprints(inputfile,
 
             xr0 = xr
             yr0 = yr
-            print('long', xr, yr)
             ra0 = ra_long
             dec0 = dec_long
             pa = theta_long
@@ -770,7 +843,7 @@ def footprints(inputfile,
             for shft in range(len(shiftv2)):
                 v20 = xr0 + (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
-                print(v20, v30)
+                #print(v20, v30)
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
                     a = pointing(m, v2[k], v3[k])
@@ -778,37 +851,61 @@ def footprints(inputfile,
                     myv3 = np.append(myv3, a[1])
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
-            if (dither_pattern_long == 'No'):
+            if (dither_pattern_long == 'None'):
                 napertures = 4
             if (dither_pattern_long ==
-                    'Three' or dither_pattern_long == 'Threetight'):
+                    'FULL3' or dither_pattern_long == 'FULL3TIGHT'):
                 napertures = 12
             create_footprint(
                 inputfile,
                 myv2,
                 myv3,
                 napertures,
-                'ds9-long-mosaic.reg',
+                os.path.join(outdir, 'ds9-long-mosaic.reg'),
                 collong)
 
 
 #-------------------------------------------------------------------
 # nircam short
     if plot_short == 'Yes':
-        print(plot_short)
         print('processing NIRCAM SWC')
+
+        v2sh, v3sh, aper, v2ref, v3ref = read_table(
+            os.path.join(PKG_DATA_DIR, 'table-nircam-short.txt'))
+        v2sh = np.array(v2sh, np.float_)
+        v3sh = np.array(v3sh, np.float_)
+
+#--------------------------------------------------------------------------
+#  here i need to transform ra dec to float          06JUN2017    LEONARDO
+
+        print('using NIRCAm RA  :', ra_long)
+        print('using NIRCam DEC :', dec_long)
+        ra_short = ra_long
+        dec_short = dec_long
+
+        if (' ' in ra_long) and (' ' in dec_long):
+            # it recognizes that the string has the format   hh mm ss.sss
+            b = ra_long + ' ' + dec_long
+            c = SkyCoord(b, unit=(u.hourangle, u.deg))
+            #   transform to degrees to be used in the rest of the code
+            ra = c.ra.deg
+            dec = c.dec.deg
+            ra_short = np.array(ra, np.float_)
+            dec_short = np.array(dec, np.float_)
+
+        else:  # string is in units of degrees
+            ra_short = np.array(ra_short, np.float_)
+            dec_short = np.array(dec_short, np.float_)
+#----------------------------------------------------------------------------
+
         create_footprint_center(
             inputfile,
             ra_short,
             dec_short,
-            'ds9-short-centre.reg',
+            os.path.join(outdir, 'ds9-short-centre.reg'),
             colshort)
 
-        v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nircam-short.txt'))
-        v2sh = np.array(v2sh, np.float_)
-        v3sh = np.array(v3sh, np.float_)
-
-        if dither_pattern_short == 'No':
+        if dither_pattern_short == 'None':
             x2 = v2sh
             x3 = v3sh
             v2 = v2sh
@@ -839,7 +936,6 @@ def footprints(inputfile,
             pa = theta_short
             myv2 = []
             myv3 = []
-            # for shft in (0,1,2):
             v20 = xr0
             v30 = yr0
             m = attitude(v20, v30, ra0, dec0, pa)
@@ -849,16 +945,16 @@ def footprints(inputfile,
                 myv3 = np.append(myv3, a[1])
             myv2 = np.array(myv2)
             myv3 = np.array(myv3)
-            print(myv2)
+            # print(myv2)
             create_footprint(
                 inputfile,
                 myv2,
                 myv3,
                 8,
-                'ds9-short-no.reg',
+                os.path.join(outdir, 'ds9-short-no.reg'),
                 colshort)
 
-        if dither_pattern_short == 'Three':
+        if dither_pattern_short == 'FULL3':
             shiftv2 = [0.0, -58.0, 58.0]
             shiftv3 = [0.0, -23.5, 23.5]
             x2 = v2sh
@@ -875,7 +971,6 @@ def footprints(inputfile,
             ysh3 = (x3[20] + x3[22]) / 2.0
             xsh4 = (x2[25] + x2[27]) / 2.0
             ysh4 = (x3[25] + x3[27]) / 2.0
-
             # calculate center for rotation
             xr13 = (xsh1 + xsh3) / 2.0
             yr13 = (ysh1 + ysh3) / 2.0
@@ -905,10 +1000,10 @@ def footprints(inputfile,
                 myv2,
                 myv3,
                 24,
-                'ds9-short-three.reg',
+                os.path.join(outdir, 'ds9-short-three.reg'),
                 colshort)
 
-        if dither_pattern_short == 'Threetight':
+        if dither_pattern_short == 'FULL3TIGHT':
             shiftv2 = [0.0, -58.0, 58.0]
             shiftv3 = [0.0, -7.5, 7.5]
             x2 = v2sh
@@ -955,15 +1050,16 @@ def footprints(inputfile,
                 myv2,
                 myv3,
                 24,
-                'ds9-short-threetight.reg',
+                os.path.join(outdir, 'ds9-short-threetight.reg'),
                 colshort)
 
-        if dither_pattern_short == 'Six':
+        if dither_pattern_short == 'FULL6':
             shiftv2 = [-72.0, -43.0, -14.0, 15.0, 44.0, 73.0]
             shiftv3 = [-30.0, -18.0, -6.0, 6.0, 18.0, 30.0]
 
             # determine center of rotation using info from long dither pattern
-            v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nircam-long.txt'))
+            v2sh, v3sh, aper, v2ref, v3ref = read_table(
+                os.path.join(PKG_DATA_DIR, 'table-nircam-long.txt'))
             v2sh = np.array(v2sh, np.float_)
             v3sh = np.array(v3sh, np.float_)
 
@@ -978,7 +1074,8 @@ def footprints(inputfile,
             xr = ((xa + xb) / 2.)
             yr = ((ya + yb) / 2.)
 
-            v2sh, v3sh, aper, v2ref, v3ref = read_table(os.path.join(PKG_DATA_DIR, 'table-nircam-short.txt'))
+            v2sh, v3sh, aper, v2ref, v3ref = read_table(
+                os.path.join(PKG_DATA_DIR, 'table-nircam-short.txt'))
             v2sh = np.array(v2sh, np.float_)
             v3sh = np.array(v3sh, np.float_)
 
@@ -1007,30 +1104,27 @@ def footprints(inputfile,
                 myv2,
                 myv3,
                 48,
-                'ds9-short-six.reg',
+                os.path.join(outdir, 'ds9-short-six.reg'),
                 colshort)
 
 
 #  mosaic  short wavelength channel
 
-        if (dither_pattern_short == 'Three' or dither_pattern_short ==
-                'Threetight' or dither_pattern_short == 'No') and mosaic == 'Yes':
-            if dither_pattern_short == 'Three':
+        if (dither_pattern_short == 'FULL3' or dither_pattern_short ==
+                'FULL3TIGHT' or dither_pattern_short == 'None') and mosaic == 'Yes':
+            if dither_pattern_short == 'FULL3':
                 shiftv3 = [0.0, -23.5, 23.5, usershiftv3 + 0.0,
                            usershiftv3 - 23.5, usershiftv3 + 23.5]
-            if dither_pattern_short == 'Threetight':
+            if dither_pattern_short == 'FULL3TIGHT':
                 shiftv3 = [0.0, -7.5, 7.5, usershiftv3 + 0.0,
                            usershiftv3 - 7.5, usershiftv3 + 7.5]
 
             shiftv2 = [0.0, -58.0, 58.0, usershiftv2 + 0.0,
                        usershiftv2 - 58.0, usershiftv2 + 58.0]
 
-            if (dither_pattern_short == 'No'):
+            if (dither_pattern_short == 'None'):
                 shiftv3 = [0.0, usershiftv3 + 0.0]
                 shiftv2 = [0.0, usershiftv2 + 0.0]
-
-
-#         print shiftv3
             v2 = v2sh
             v3 = v3sh
 
@@ -1038,7 +1132,7 @@ def footprints(inputfile,
             v2 = np.append(v2, v2 + usershiftv2)
             v3 = np.append(v3, v3 + usershiftv3)
             ascii.write([v2, v3], 'values.dat')
-           # sys.exit("quitting now...")
+
             xa = (v2[0] + v2[22]) / 2.0
             ya = (v3[0] + v3[22]) / 2.0
             xb = (v2[8] + v2[26]) / 2.0
@@ -1055,7 +1149,6 @@ def footprints(inputfile,
             xr = ((xr1 + xr2) / 2.)
             yr = ((yr1 + yr2) / 2.)
 
-            print('short', xr, yr)
             xr0 = xr
             yr0 = yr
             ra0 = ra_short
@@ -1068,7 +1161,7 @@ def footprints(inputfile,
             for shft in range(len(shiftv2)):
                 v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 - (shiftv3[shft])  # here we shift
-                print(v20, v30)
+                #print(v20, v30)
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
                     a = pointing(m, v2[k], v3[k])
@@ -1076,21 +1169,19 @@ def footprints(inputfile,
                     myv3 = np.append(myv3, a[1])
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
-            if (dither_pattern_short == 'No'):
+            if (dither_pattern_short == 'None'):
                 napertures = 16
             if (dither_pattern_short ==
-                    'Three' or dither_pattern_short == 'Threetight'):
+                    'FULL3' or dither_pattern_short == 'FULL3TIGHT'):
                 napertures = 48
             create_footprint(
                 inputfile,
                 myv2,
                 myv3,
                 napertures,
-                'ds9-short-mosaic.reg',
+                os.path.join(outdir, 'ds9-short-mosaic.reg'),
                 colshort)
 #  mosaic  short wavelength channel
-
-    import pyds9
 
     # Start xpans prior to running DS9
     pyds9.ds9_xpans()
@@ -1103,48 +1194,44 @@ def footprints(inputfile,
     d.set('scale limits ' + ds9limmin + ' ' + ds9limmax)
     d.set('scale ' + ds9scale)
     d.set('file ' + inputfile)
-    # iraf.images()
-    # iraf.tv()
-
     # load regions
     if plot_long == 'Yes':
-        d.set('regions ds9-long-centre.reg')
+        d.set('regions ' + os.path.join(outdir, 'ds9-long-centre.reg'))
         if mosaic == 'No':
-            if dither_pattern_long == 'Threetight':
-                d.set('regions ds9-long-threetight.reg')
-            if dither_pattern_long == 'Three':
-                d.set('regions ds9-long-three.reg')
-            if dither_pattern_long == 'Six':
-                d.set('regions ds9-long-six.reg')
-            if dither_pattern_long == 'No':
-                d.set('regions ds9-long-no.reg')
+            if dither_pattern_long == 'FULL3TIGHT':
+                d.set('regions ' + os.path.join(outdir, 'ds9-long-threetight.reg'))
+            if dither_pattern_long == 'FULL3':
+                d.set('regions ' + os.path.join(outdir, 'ds9-long-three.reg'))
+            if dither_pattern_long == 'FULL6':
+                d.set('regions ' + os.path.join(outdir, 'ds9-long-six.reg'))
+            if dither_pattern_long == 'None':
+                d.set('regions ' + os.path.join(outdir, 'ds9-long-no.reg'))
         if mosaic == 'Yes':
-            d.set('regions ds9-long-mosaic.reg')
+            d.set('regions ' + os.path.join(outdir, 'ds9-long-mosaic.reg'))
 
     if plot_short == 'Yes':
-        d.set('regions ds9-short-centre.reg')
+        d.set('regions ' + os.path.join(outdir, 'ds9-short-centre.reg'))
         if mosaic == 'No':
-            if dither_pattern_short == 'Threetight':
-                d.set('regions ds9-short-threetight.reg')
-            if dither_pattern_short == 'Three':
-                d.set('regions ds9-short-three.reg')
-            if dither_pattern_short == 'Six':
-                d.set('regions ds9-short-six.reg')
-            if dither_pattern_short == 'No':
-                d.set('regions ds9-short-no.reg')
+            if dither_pattern_short == 'FULL3TIGHT':
+                d.set('regions ' + os.path.join(outdir, 'ds9-short-threetight.reg'))
+            if dither_pattern_short == 'FULL3':
+                d.set('regions ' + os.path.join(outdir, 'ds9-short-three.reg'))
+            if dither_pattern_short == 'FULL6':
+                d.set('regions ' + os.path.join(outdir, 'ds9-short-six.reg'))
+            if dither_pattern_short == 'None':
+                d.set('regions ' + os.path.join(outdir, 'ds9-short-no.reg'))
         if mosaic == 'Yes':
-            d.set('regions ds9-short-mosaic.reg')
+            d.set('regions ' + os.path.join(outdir, 'ds9-short-mosaic.reg'))
 
     if plot_msa == 'Yes':
-        d.set('regions ds9-msa.reg')
-        d.set('regions ds9-msa-centre.reg')
-       # d.set('ds9-ifu.reg')
+        d.set('regions ' + os.path.join(outdir, 'ds9-msa.reg'))
+        d.set('regions ' + os.path.join(outdir, 'ds9-msa-centre.reg'))
 
     if plot_sources == 'Yes':
         if flagsources == 3:
-            print(plot_sources)
-            d.set('regions ds9-sources-fillers.reg')
-            d.set('regions ds9-sources-primary.reg')
+            # print(plot_sources)
+            d.set('regions ' + os.path.join(outdir, 'ds9-sources-fillers.reg'))
+            d.set('regions ' + os.path.join(outdir, 'ds9-sources-primary.reg'))
         if flagsources == 2:
-            print(plot_sources)
-            d.set('regions ds9-sources.reg')
+            # print(plot_sources)
+            d.set('regions ' + os.path.join(outdir, 'ds9-sources.reg'))
