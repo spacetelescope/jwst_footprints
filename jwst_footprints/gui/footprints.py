@@ -370,6 +370,7 @@ class FootprintsUI(object):
     def quit(self):
         self.config['fits_name'] = self.fileVar.get()
         self.config['cat_name'] = self.catVar.get()
+        self.config['out_dir'] = os.path.abspath(self.outdirVar.get())
         self.config['plot_long'] = self.plotlongVar.get()
         self.config['plot_short'] = self.plotshortVar.get()
         self.config['plot_msa'] = self.plotmsaVar.get()
