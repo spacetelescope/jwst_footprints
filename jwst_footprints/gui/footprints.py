@@ -11,12 +11,12 @@ from ..defaults import default_config
 from ..plot_timeline import plottimeline
 
 try:
-    from Tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar,
+    from Tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar, \
                          Toplevel, TRUE, FALSE)
     from tkFileDialog import askopenfilename
 except ImportError as e:
     from tkinter.filedialog import askopenfilename
-    from tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar,
+    from tkinter import (Tk, Button, Entry, Label, OptionMenu, StringVar, \
                          Toplevel, TRUE, FALSE)
 
 from PIL import ImageTk
@@ -125,8 +125,7 @@ class FootprintsUI(object):
         self.master = master
         self.master.resizable(width=FALSE, height=FALSE)
         self.master.title('NIRspec Observation Visualization Tool')
-        self.background = ImageTk.PhotoImage(
-            file=os.path.join(PKG_DATA_DIR, "background.png"))
+        self.background = ImageTk.PhotoImage(file=os.path.join(PKG_DATA_DIR, "back-08.png"))
 
         w = self.background.width()
         h = self.background.height()
@@ -143,6 +142,7 @@ class FootprintsUI(object):
         self.panel1.place(x=0, y=0)
         # panel1.image = image1
 
+
         # assigning values to colors
         self.colmsaVar = StringVar()
         self.colmsaVar.set(self.config['color_msa'])
@@ -153,7 +153,8 @@ class FootprintsUI(object):
 
         self.readfitsimageVar = StringVar()
         self.readfitsimageVar.set(self.config['readfitsimage'])
-        # print(readfitsimageVar)
+      #  print(readfitsimageVar)
+
 
         self.labplotsources = Label(self.master, text=" Catalog on ?")
         self.labplotsources.place(relx=0.44, rely=0.26, anchor="w")
@@ -171,10 +172,10 @@ class FootprintsUI(object):
 
         self.colmsaVar = StringVar()
         self.colmsaVar.set(self.config['color_msa'])
-        self.colmsa = OptionMenu(
-            self.master, self.colmsaVar, 'Red', 'Cyan', 'Blue', 'Yellow', 'Green')
+        self.colmsa = OptionMenu(self.master, self.colmsaVar, 'Red', 'Cyan', 'Blue', 'Yellow','Green')
         self.colmsa.config(width=9)
         self.colmsa.place(relx=0.49, rely=0.38, anchor="w")
+
 
         self.labramsa = Label(self.master, text="RA center of MSA")
         self.labramsa.place(relx=0.65, rely=0.42, anchor="w")
@@ -250,8 +251,7 @@ class FootprintsUI(object):
         self.labdither.place(relx=0.02, rely=0.81, anchor="w")
         self.ditherVar = StringVar()
         self.ditherVar.set(self.config['dither'])
-        self.pt = OptionMenu(self.master, self.ditherVar,
-                             'None', 'FULL3', 'FULL3TIGHT', 'FULL6')
+        self.pt = OptionMenu(self.master, self.ditherVar, 'None', 'FULL3', 'FULL3TIGHT', 'FULL6', '8NIRSPEC')
         self.pt.place(relx=0.35, rely=0.81, anchor="w")
 
         self.labmosaic = Label(self.master, text="NIRCam mosaic")
@@ -279,75 +279,72 @@ class FootprintsUI(object):
         self.offver_ttp = CreateToolTip(self.offver,
                                         'Enter NIRCam offset in arcsec')
 
+
+
+
         self.ptVar = StringVar()
         self.ptVar.set('footprints')
 
-        self.b5 = Button(self.master, text=" Select File ",
-                         command=self.readfitsfilename)
+        self.b5 = Button(self.master, text=" Select File ", command=self.readfitsfilename)
         self.b5.place(relx=0.43, rely=0.12, anchor="w")
 
         self.fileVar = StringVar()
         self.fileVar.set(self.config['fits_name'])
-        self.filevalue = Entry(
-            self.master, textvariable=self.fileVar, width=40, justify='left')
+        self.filevalue = Entry(self.master, textvariable=self.fileVar, width=40, justify='left')
         self.filevalue.place(relx=0.02, rely=0.15, anchor="w")
 
-        self.b6 = Button(self.master, text=" Select File ",
-                         command=self.readcataloguename)
+        self.b6 = Button(self.master, text=" Select File ", command=self.readcataloguename)
         self.b6.place(relx=0.43, rely=0.295, anchor="w")
         self.catVar = StringVar()
         self.catVar.set(self.config['cat_name'])
-        self.catvalue = Entry(
-            self.master, textvariable=self.catVar, width=28, justify='left')
+        self.catvalue = Entry(self.master, textvariable=self.catVar, width=28, justify='left')
         self.catvalue.place(relx=0.02, rely=0.295, anchor="w")
 
-        self.b7 = Button(self.master, text="View Timeline",
-                         command=self.maketimeline)
+        self.b7 = Button(self.master, text="View Timeline", command=self.maketimeline)
         self.b7.place(relx=0.6, rely=0.96, anchor="w")
         self.b3 = Button(self.master, text=" Quit ", command=self.quit)
         self.b3.place(relx=0.2, rely=0.96, anchor="w")
 
-        self.b4 = Button(self.master, text=" Display ",
-                         command=self.makefootprints)
+        self.b4 = Button(self.master, text=" Display ", command=self.makefootprints)
         self.b4.place(relx=0.8, rely=0.96, anchor="w")
+
 
         self.outdirVar = StringVar()
         self.outdirVar.set(self.config['out_dir'])
-        self.outdirvalue = Entry(
-            self.master, textvariable=self.outdirVar, width=40, justify='left')
+        self.outdirvalue = Entry(self.master, textvariable=self.outdirVar, width=40, justify='left')
         self.outdirvalue.place(relx=0.02, rely=0.219, anchor="w")
-        # self.laboutdir = Label(self.master, text="Output directory")
-        # self.laboutdir.place(relx=0.02, rely=0.25, anchor="w")
+        #self.laboutdir = Label(self.master, text="Output directory")
+        #self.laboutdir.place(relx=0.02, rely=0.25, anchor="w")
+      
 
         self.colshortVar = StringVar()
         self.colshortVar.set(self.config['color_short'])
-        self.colshort = OptionMenu(
-            self.master, self.colshortVar, 'Green', 'Cyan', 'Blue', 'Yellow', 'Red')
+        self.colshort = OptionMenu(self.master, self.colshortVar, 'Green', 'Cyan','Blue','Yellow','Red')
         self.colshort.config(width=9)
         self.colshort.place(relx=0.49, rely=0.61, anchor="w")
 
         self.collongVar = StringVar()
         self.collongVar.set(self.config['color_long'])
-        self.collong = OptionMenu(
-            self.master, self.collongVar, 'Blue', 'Cyan', 'Green', 'Yellow', 'Red')
+        self.collong = OptionMenu(self.master, self.collongVar, 'Blue', 'Cyan','Green','Yellow','Red')
         self.collong.config(width=9)
         self.collong.place(relx=0.49, rely=0.65, anchor="w")
 
-        self.labcmap = Label(self.master, text="Colour Map")
+ 
+
+        self.labcmap= Label(self.master, text="Colour Map")
         self.labcmap.place(relx=0.65, rely=0.18, anchor="w")
         self.ds9cmapVar = StringVar()
         self.ds9cmapVar.set(self.config['cmap'])
-        self.ds9cmap = OptionMenu(
-            self.master, self.ds9cmapVar, 'grey', 'red', 'green', 'blue', 'heat')
+        self.ds9cmap = OptionMenu(self.master, self.ds9cmapVar, 'grey', 'red', 'green', 'blue', 'heat')
         self.ds9cmap.place(relx=0.80, rely=0.18, anchor="w")
         self.ds9cmap.config(width=10)
+
 
         self.labscale = Label(self.master, text="Scale")
         self.labscale.place(relx=0.65, rely=0.21, anchor="w")
         self.ds9scaleVar = StringVar()
         self.ds9scaleVar.set(self.config['scale'])
-        self.ds9scale = OptionMenu(
-            self.master, self.ds9scaleVar, 'log', 'linear', 'power', 'sqrt', 'zscale', 'minmax')
+        self.ds9scale = OptionMenu(self.master, self.ds9scaleVar, 'log', 'linear', 'power', 'sqrt', 'zscale', 'minmax')
         self.ds9scale.place(relx=0.80, rely=0.21, anchor="w")
         self.ds9scale.config(width=10)
 
@@ -358,7 +355,7 @@ class FootprintsUI(object):
         self.ds9limmin = Entry(self.master, textvariable=self.ds9limminVar)
         self.ds9limmin.place(relx=0.80, rely=0.24, anchor="w")
         self.ds9limmin.config(width=10)
-
+       
         self.ds9limmax = Label(self.master, text="High")
         self.ds9limmax.place(relx=0.65, rely=0.27, anchor="w")
         self.ds9limmaxVar = StringVar()
@@ -366,11 +363,11 @@ class FootprintsUI(object):
         self.ds9limmax = Entry(self.master, textvariable=self.ds9limmaxVar)
         self.ds9limmax.place(relx=0.80, rely=0.27, anchor="w")
         self.ds9limmax.config(width=10)
+  
 
     def quit(self):
         self.config['fits_name'] = self.fileVar.get()
         self.config['cat_name'] = self.catVar.get()
-        self.config['out_dir'] = os.path.abspath(self.outdirVar.get())
         self.config['plot_long'] = self.plotlongVar.get()
         self.config['plot_short'] = self.plotshortVar.get()
         self.config['plot_msa'] = self.plotmsaVar.get()
@@ -392,13 +389,13 @@ class FootprintsUI(object):
         self.config['lim_min'] = float(self.ds9limminVar.get())
         self.config['lim_max'] = float(self.ds9limmaxVar.get())
         self.config['scale'] = self.ds9scaleVar.get()
-
+        
         self.config.commit()
         self.master.quit()
 
     def makefootprints(self):
         if self.ptVar.get() == 'footprints':
-            # print(self.catVar.get())
+            #print(self.catVar.get())
             footprints(self.fileVar.get(),
                        self.catVar.get(),
                        self.plotlongVar.get(),
@@ -423,7 +420,7 @@ class FootprintsUI(object):
                        self.ds9limmaxVar.get(),
                        self.ds9scaleVar.get(),
                        self.outdirVar.get())
-            # self.readfitsimageVar.get())
+                       #self.readfitsimageVar.get())
 
     def readcataloguename(self):
         Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
@@ -433,15 +430,14 @@ class FootprintsUI(object):
                                    filetypes=(('RADEC files', '*.radec'),
                                               ('all files', '*.*')))
 
-        # print(filename)
+        #print(filename)
         self.catVar.set(filename)
 
-        catvalue = Entry(self.master, textvariable=self.catVar,
-                         width=28, justify='right')
+        catvalue = Entry(self.master, textvariable=self.catVar, width=28, justify='right')
         catvalue.place(relx=0.02, rely=0.24, anchor="w")
 
     def readfitsfilename(self):
-        # readfitsimage =True     # set variable to read new image
+        #readfitsimage =True     # set variable to read new image
 
         Tk().withdraw()  # we don't want a full GUI, so keep the root window from appearing
         # show an "Open" dialog box and return the path to the selected file
@@ -449,15 +445,14 @@ class FootprintsUI(object):
                                    title='Select FITS file',
                                    filetypes=(('FITS files', '*.fits'),
                                               ('all files', '*.*')))
-        # print(filename)
+        #print(filename)
         self.fileVar.set(filename)
 
-        filevalue = Entry(self.master, textvariable=self.fileVar,
-                          width=40, justify='right')
+        filevalue = Entry(self.master, textvariable=self.fileVar, width=40, justify='right')
         filevalue.place(relx=0.02, rely=0.15, anchor="w")
 
     def maketimeline(self):
-        # print(self.ramsaVar.get())
+        #print(self.ramsaVar.get())
         plottimeline(self.ramsaVar.get(),
                      self.decmsaVar.get(),
                      float(self.thmsaVar.get()),
