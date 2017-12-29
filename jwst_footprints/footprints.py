@@ -686,7 +686,8 @@ def footprints(inputfile,
                collong)
 
         #                                                                          8NIRSPEC  29NOV2017
-        if dither_pattern_long == '8NIRSPEC' and mosaic == 'No':
+        if dither_pattern_long == '8NIRSPEC':
+            mosaic == 'No'
             shiftv2 = [-24.6, -24.4, 24.6, 24.4, 24.6, 24.4, -24.6, -24.4]
             shiftv3 = [-64.1, -89.0, -88.8, -63.9, 64.1, 89.0, 88.8, 63.9 ]
             v2 = v2_0
@@ -716,7 +717,7 @@ def footprints(inputfile,
                     myv3 = np.append(myv3, a[1])
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
-            print(len(myv2))    
+            #print(len(myv2))    
             create_footprint(
                 inputfile,
                 myv2,
@@ -1005,7 +1006,8 @@ def footprints(inputfile,
 
 
         #                                                                          8NIRSPEC  15DEC2017
-        if dither_pattern_short == '8NIRSPEC' and mosaic == 'No':
+        if dither_pattern_short == '8NIRSPEC' :
+            mosaic == 'No'
             shiftv2 = [-24.6, -24.4, 24.6, 24.4, 24.6, 24.4, -24.6, -24.4]
             shiftv3 = [-64.1, -89.0, -88.8, -63.9, 64.1, 89.0, 88.8, 63.9 ]
             x2 = v2sh
@@ -1046,7 +1048,7 @@ def footprints(inputfile,
                     myv3 = np.append(myv3, a[1])
                 myv2 = np.array(myv2)
                 myv3 = np.array(myv3)
-            print(len(myv2))    
+            #print(len(myv2))    
             create_footprint(
                 inputfile,
                 myv2,
@@ -1309,9 +1311,10 @@ def footprints(inputfile,
                 d.set('regions ' +outdir+'/ds9-long-six.reg')
             if dither_pattern_long == 'None':
                 d.set('regions ' +outdir+'/ds9-long-no.reg')
-        if mosaic == 'Yes':
+        if mosaic == 'Yes' and dither_pattern_long != '8NIRSPEC' :
             d.set('regions ' +outdir+'/ds9-long-mosaic.reg')
-
+        if mosaic == 'Yes' and dither_pattern_long == '8NIRSPEC' :
+            print('Mosaic pattern is disabled for 8NIRSPEC dither pattern')
     if plot_short == 'Yes':
         d.set('regions ' +outdir+'/ds9-short-centre.reg')
         if mosaic == 'No':
@@ -1325,8 +1328,10 @@ def footprints(inputfile,
                 d.set('regions ' +outdir+'/ds9-short-six.reg')
             if dither_pattern_short == 'None':
                 d.set('regions ' +outdir+'/ds9-short-no.reg')
-        if mosaic == 'Yes':
+        if mosaic == 'Yes' and dither_pattern_short != '8NIRSPEC':
             d.set('regions ' +outdir+'/ds9-short-mosaic.reg')
+        if mosaic == 'Yes' and dither_pattern_short == '8NIRSPEC':
+            print('Mosaic pattern is disabled for 8NIRSPEC dither pattern')
 
     if plot_msa == 'Yes':
         d.set('regions ' +outdir+'/ds9-msa.reg')
