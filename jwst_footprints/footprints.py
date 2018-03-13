@@ -12,6 +12,9 @@ Updated by Joseph Hunkeler
 
 
 version history
+2.4      12MAR2018      changed from V3PA to aperture position angle
+                        help desk ticket INC0048565
+
 2.3      01JAN2018      added NIRSpec fixed slit apertures
                         added NIRCam 8NIRSPEC dither pattern
                         changed launch date and science cycles in timeline
@@ -579,8 +582,8 @@ def footprints(inputfile,
         xr0 = xr
         yr0 = yr
         ra0 = ra_msa
-        dec0 = dec_msa
-        pa = theta_msa
+        dec0 = dec_msa 
+        pa = theta_msa - 137.4874   #  12MAR2018   NRS_FULL_MSA_V3IdlYang = 137.4874
         myv2 = []
         myv3 = []
         v20 = xr0
@@ -665,7 +668,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_long
             dec0 = dec_long
-            pa = theta_long
+            pa = theta_long + 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             # for shft in (0,1,2):
@@ -703,7 +706,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_long
             dec0 = dec_long
-            pa = theta_long
+            pa = theta_long+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             #for shft in (0, 1, 2, 4, 5, 6, 7):
@@ -743,7 +746,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_long
             dec0 = dec_long
-            pa = theta_long
+            pa = theta_long+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2):
@@ -780,7 +783,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_long
             dec0 = dec_long
-            pa = theta_long
+            pa = theta_long+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2):
@@ -823,7 +826,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_long
             dec0 = dec_long
-            pa = theta_long
+            pa = theta_long+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2, 3, 4, 5):
@@ -887,7 +890,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_long
             dec0 = dec_long
-            pa = theta_long
+            pa = theta_long+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             for shft in range(len(shiftv2)):
@@ -983,7 +986,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_short
             dec0 = dec_short
-            pa = theta_short
+            pa = theta_short+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             v20 = xr0
@@ -1035,7 +1038,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_short
             dec0 = dec_short
-            pa = theta_short
+            pa = theta_short+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             for shft in range(len(shiftv2)):
@@ -1087,7 +1090,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_short
             dec0 = dec_short
-            pa = theta_short
+            pa = theta_short+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2):
@@ -1137,7 +1140,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_short
             dec0 = dec_short
-            pa = theta_short
+            pa = theta_short+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2):
@@ -1189,7 +1192,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_short
             dec0 = dec_short
-            pa = theta_short
+            pa = theta_short+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2, 3, 4, 5):
@@ -1256,7 +1259,7 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_short
             dec0 = dec_short
-            pa = theta_short
+            pa = theta_short+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             v2 = v2sh
