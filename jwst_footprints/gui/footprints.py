@@ -434,7 +434,7 @@ class FootprintsUI(object):
         self.catVar.set(filename)
 
         catvalue = Entry(self.master, textvariable=self.catVar, width=28, justify='right')
-        catvalue.place(relx=0.02, rely=0.24, anchor="w")
+        catvalue.place(relx=0.02, rely=0.295, anchor="w")
 
     def readfitsfilename(self):
         #readfitsimage =True     # set variable to read new image
