@@ -98,14 +98,16 @@ def plottimeline(ra_msa='202.47',
 
     commissioning_start = datetime.date(2019, 3, 1)
     commissioning_end = datetime.date(2019, 8, 31)
-    plt.axvspan(
-        commissioning_start,
-        commissioning_end,
-        ymin=0.0,
-        ymax=360,
-        alpha=0.99,
-        color='steelblue')
+    #plt.axvspan(
+    #    commissioning_start,
+    #    commissioning_end,
+    #    ymin=0.0,
+    #    ymax=360,
+    #    alpha=0.99,
+    #    color='steelblue')
     #plt.text(commissioning_start, 378, 'JWST')
+    
+    '''
     plt.text(commissioning_start, 365, 'commissioning')
 
     cycle1_start = datetime.date(2019, 9, 1)
@@ -129,17 +131,19 @@ def plottimeline(ra_msa='202.47',
         alpha=1.0,
         color='white')
     plt.text(datetime.date(2020, 9, 1), 370, 'science cycle 2')
-
+    '''
     cycle3_start = datetime.date(2021, 9, 1)
     cycle3_end = datetime.date(2022, 8, 31)
-    plt.axvspan(
-        cycle3_start,
-        cycle3_end,
-        ymin=0.0,
-        ymax=360,
-        alpha=0.2,
-        color='grey')
+    #plt.axvspan(
+    #    cycle3_start,
+    #    cycle3_end,
+    #    ymin=0.0,
+    #    ymax=360,
+    #    alpha=0.2,
+    #    color='grey')
     #plt.text(datetime.date(2021, 8, 1), 370, 'cycle 3 science')
+    
+
 
     plt.text(commissioning_start, 399, 'RA  : ' + str(ra_msa))
     plt.text(commissioning_start, 385, 'DEC : ' + str(dec_msa))
