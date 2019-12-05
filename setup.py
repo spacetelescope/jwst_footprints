@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='jwst_footprints',
-    version='2.4.1',
+    version='2.4.2',
     author='Leonardo Ubeda',
     author_email='lubeda@stsci.edu',
     description='The JWST NIRSpec Observation Visualization Tool is a Python application that provides a simultaneous view of both NIRSpec and NIRCam fields of view on a given sky position, for assistance in planning NIRCam pre-imaging for NIRSpec.',
