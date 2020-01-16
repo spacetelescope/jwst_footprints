@@ -1,0 +1,50 @@
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Define the pipeline environment & structure
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# We set the language to c, because python isn't supported on the MacOS X nodes
+# on Travis. (However, the language ends up being irrelevant anyway, since we
+# install Python ourselves using conda.)
+language: c
+compiler: gcc
+
+# Setting sudo to false opts in to Travis-CI container-based builds.
+sudo: false
+
+# Define environment variables that will be used by all builds.
+env:
+    global:
+        - PYTHON_VERSION=3.6
+        - EVENT_TYPE='push pull_request'
+
+# Construct all build in the build matrix (here, just 2)
+matrix:
+    include:
+        # Build 1: Run pytest suite on Linux
+        - name: Test Linux  # Define build name
+          os: linux  # Define OS
+          env: TEST_COMMAND="python setup.py install"  # Build-specific env variable
+
+        # Build 2: Run pytest suite on Mac OSX
+        - name: Test OSX
+          os: osx
+          osx_image: xcode10.2
+          env: TEST_COMMAND="python setup.py install"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Define the pipeline commands
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Commands to be run before installing build dependencies
+before_install:
+    # Use helpful astropy resources
+    - git clone git://github.com/astropy/ci-helpers.git
+    - source ci-helpers/travis/setup_conda_$TRAVIS_OS_NAME.sh
+
+# Commands to install build dependencies
+install:
+    - pip install -e . # Install package to test
+
+# Commands to run in each build (these determine whether a build passes or fails)
+script:
+    - $TEST_COMMAND
