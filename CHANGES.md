@@ -30,4 +30,8 @@
 
 - added hhmmss format for RA 
 - added ddmmss format for DEC
-- changed the naming convention of dither patterns to FULL3 
+- changed the naming convention of dither patterns to FULL3 FULL3TIGHT FULL6
+
+### 1.0 (14JUL2016)
+
+- initial release
