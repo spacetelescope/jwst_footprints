@@ -3,7 +3,7 @@ The NOVT team uses the following procedure for creating a software release when 
     1. Make sure that your fork of the "master" branch is up-to-date
     2. Update appropriate version numbers in footprints.py and setup.py
     3. Update the release notes
-    4. Open, review, and merge pull request with the release procedure changes
+    4. Open, review, and merge pull request with the changes
     5. Create a new tag/release on GitHub/GitLab
     6. Upload new version of software to PyPI
 
