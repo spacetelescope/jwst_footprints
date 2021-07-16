@@ -1,5 +1,7 @@
 # JWST NIRSpec Obersvation Visualization Tool (NOVT)
 
+## Getting Started
+
 To install and run via Github: 
 ```bash
 $ git clone https://github.com/spacetelescope/jwst_footprints
