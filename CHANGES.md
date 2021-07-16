@@ -2,7 +2,8 @@
 
 ### 2.5 (unreleased)
 
-- Resolved issue with NIRCam dither patterns
+- resolved issue with NIRCam dither patterns [Issue #9]
+- added files to meet the Teir 2 community software standards
 
 ### 2.4 (12MAR2018)
 
