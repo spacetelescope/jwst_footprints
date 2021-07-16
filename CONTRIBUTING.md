@@ -5,7 +5,7 @@ This repository follows STScI's guidelines for group-work in `git`.
 
 New contributions and contributors are very welcome!
 
-If you would like to report a bug, give feedback, suggest changes, or have a feature request, please open an issue in the Issues page of the repository or submit a ticket in the [JWST Help Desk](https://jwsthelp.stsci.edu). 
+If you would like to report a bug, give feedback, suggest changes, or have a feature request, please open an issue in the Issues tab of the repository or submit a ticket in the [JWST Help Desk](https://jwsthelp.stsci.edu). 
 
 If there is a fix, feature, or improvement you would like to work on, please do the following:
 1. Create a personal fork of this repository on GitHub
