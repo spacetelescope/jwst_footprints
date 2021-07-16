@@ -1,7 +1,7 @@
 The NOVT team uses the following procedure for creating a software release when an update is needed:
 
     1. Create a new branch for changes related to the version release procedure
-    2. Update appropriate version numbers in footprints.py and setup.py,
+    2. Update appropriate version numbers in footprints.py and setup.py
     3. Update the release notes
     4. Open, review, and merge pull request with the release procedure changes
     5. Create a new tag/release on GitHub/GitLab
@@ -17,7 +17,7 @@ vx.y.z should be opened off of the <develop branch>, where vx.y.z is the version
 
 2. Update the version number in footprints.py and setup.py
 
-Update the VERSION variable in setup.py and the version listed in the docstring of footprints.py to the new version number, using the x.y.z convention.
+Update the VERSION variable in setup.py and the version listed in the docstring (code description) in footprints.py to the new version number, using the x.y.z convention.
 
 3. Update the release notes
 
