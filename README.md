@@ -1,4 +1,4 @@
-# jwst_footprints
+# JWST NIRSpec Obersvation Visualization Tool (NOVT)
 
 To install and run via Github: 
 ```bash
@@ -17,4 +17,4 @@ $ jwst_footprints
 
 Documentation: https://jwst-docs.stsci.edu/near-infrared-spectrograph/nirspec-apt-templates/nirspec-multi-object-spectroscopy-apt-template/nirspec-observation-visualization-tool-help
 
-Help: https://jwsthelp.stsci.edu
+STScI JWST Help Desk: https://jwsthelp.stsci.edu
