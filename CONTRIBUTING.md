@@ -1,11 +1,31 @@
-# ``git`` Workflow
+## Contributing 
 
-This repo follows STScI's guidelines for group-work in `git`. 
 
-Please create a new branch in your fork per issue, and open a new issue or new pull request (PR) for bugs, feedback, or new features you would like to see. Mark this PR as "work-in-progress" while you are still working on the code. Once the code is ready for review, remove the "work-in-progress" and we will review the code and request you to make chances, if necessary, or let you know that the code works fine and has been merged.
+This repository follows STScI's guidelines for group-work in `git`. 
 
-If there is an issue you would like to work on, please leave a comment and we will be happy to assist. New contributions and contributors are very welcome!
+New contributions and contributors are very welcome!
 
-The main development work is done on the "master" branch, pull requests should be made and submitted to the "master" branch.
+If you would like to report a bug, give feedback, suggest changes, or have a feature request, please open an issue in the Issues page of the repository or submit a ticket in the [JWST Help Desk](https://jwsthelp.stsci.edu). 
 
-Feedback and feature requests? Is there something missing you would like to see? Please open an issue or send an email to the maintainers. This package follows the Spacetelescope [Code of Conduct](CODE_OF_CONDUCT.md) strives to provide a welcoming community to all of our users and contributors.
+If there is a fix, feature, or improvement you would like to work on, please do the following:
+1. Create a personal fork of this repository on GitHub
+2. Make a local clone of your personal fork
+3. Ensure your local copy is pointing upstream properly with:
+```bash
+$ git remote add upstream https://github.com/spacetelescope/jwst_footprints.git
+```
+4. Create a branch on that local copy
+5. Make your changes
+6. Push that branch to your personal fork on GitHub (i.e. origin)
+7. On the spacetelescope repository, create a pull request from your personal fork to the "master" branch
+8. Assign a reviewer (@ewislowski, @lubeda, or @penaguerrero)
+9. Iterate with the reviewer over any needed changes until the reviewer accepts and merges your branch
+
+You may also open a pull request earlier, while you are still working on the code, and mark it as "work-in-progress" until it is ready for review.
+
+If you need help getting started, leave a comment and we will be happy to assist.
+
+We follow the Spacetelescope [Code of Conduct](CODE_OF_CONDUCT.md) and strives to provide a welcoming community to all of our users and contributors.
+
+
+
