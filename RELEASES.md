@@ -11,9 +11,9 @@ Detailed instructions for performing a release are given below:
 
 1. Make sure that your fork of the "master" branch is up-to-date
 
-Make sure that your fork of the "master" branch is up-to-date. One way to do this is by clicking the **Fetch 
-Upsteam** button, and then **Fetch and merge**. This branch should be used for the changes described in 
-the rest of this document.
+Make sure that your fork of the "master" branch is up-to-date. One way to do this is by clicking the "Fetch 
+Upsteam" button, and then "Fetch and merge". This branch should be used for the changes described in the rest of
+this document.
 
 2. Update the version number in footprints.py and setup.py
 
@@ -34,8 +34,8 @@ reviewer should eventually merge this pull request.
 
 5. Create a new tag/release on GitHub/GitLab
 
-Once the pull request into the "master" branch from (4) has been merged, click on the releases button on the
-main page of the repository, then hit the "Draft a new release button". The "Tag version" should be the version
+Once the pull request into the "master" branch from (4) has been merged, click on the "Releases" button on the
+main page of the repository, then hit the "Draft a new release" button. The "Tag version" should be the version
 number of the release, the "Target" should be the "master" branch, the "Release title" should (also) be the
 version number of the release, and the "Description" should match that of the release notes entry in (3). Once all
 of that information is added, hit the big green "Publish" release button.
