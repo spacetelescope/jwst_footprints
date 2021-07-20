@@ -1,6 +1,6 @@
 ## Version History
 
-### 2.5 (unreleased)
+### 2.5 (28JUN2021)
 
 - resolved issue with NIRCam dither patterns
 - added files to meet the Teir 2 community software standards
