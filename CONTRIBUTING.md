@@ -13,6 +13,7 @@ If there is a fix, feature, or improvement you would like to work on, please do 
 3. Ensure your local copy is pointing upstream properly with:
 ```bash
 $ git remote add upstream https://github.com/spacetelescope/jwst_footprints.git
+$ git remote -v
 ```
 4. Create a branch on that local copy
 5. Make your changes
