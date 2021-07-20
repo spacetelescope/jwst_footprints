@@ -3,20 +3,20 @@
 
 """
 Created by Leonardo Ubeda on 14JUL2016
-reads tables produced by
-footprints_create_apertures-00.py
+Reads tables produced by footprints_create_apertures-00.py
 and then produces region files and displays them in DS9
 Based on work by Colin Cox and Wayne Kinzel
 Updated by Joseph Hunkeler 
-Maintained by Maria Peña Guerrero, Leonardo Ubeda, and Emily Wislowski.
+Maintained by Maria Peña Guerrero, Leonardo Ubeda, and Emily Wislowski
 
 
-version history
+Version History
 
-2.5      28JUN2021      issue with NIRCam dither patterns is resolved
+2.5      28JUN2021      resolved issue with NIRCam dither patterns (GitHub Issue #9)
+                        added files to meet the Tier 2 community software standards
 
-2.4      12MAR2018      changed from V3PA to aperture position angle
-                        help desk ticket INC0048565
+
+2.4      12MAR2018      changed from V3PA to aperture position angle (Help Desk INC0048565)
 
 2.3      01JAN2018      added NIRSpec fixed slit apertures
                         added NIRCam 8NIRSPEC dither pattern
@@ -31,7 +31,7 @@ version history
 1.2      26MAY2017      added hhmmss format for RA 
                         added ddmmss format for DEC
                         changed the naming convention of dither patterns to FULL3 FULL3TIGHT FULL6
-1.0      14JUL2016      first virsion
+1.0      14JUL2016      first version
 
 """
 
