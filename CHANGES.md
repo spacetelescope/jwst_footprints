@@ -2,12 +2,12 @@
 
 ### 2.5 (28JUN2021)
 
-- resolved issue with NIRCam dither patterns
-- added files to meet the Teir 2 community software standards
+- resolved issue with NIRCam dither patterns (GitHub Issue #9)
+- added files to meet the Tier 2 community software standards
 
 ### 2.4 (12MAR2018)
 
-- changed from V3PA to aperture position angle
+- changed from V3PA to aperture position angle (Help Desk INC0048565)
 
 ### 2.3 (01JAN2018)
 
