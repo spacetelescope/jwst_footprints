@@ -22,7 +22,7 @@ footprints.py to the new version number, using the x.y.z convention (e.g. v0.4.1
 
 3. Update the release notes
 
-In CHANGES.md, write a concise but detailed description of all of the notable changes that have
+In the docstring of footprints.py and CHANGES.md, write a concise but detailed description of all of the notable changes that have
 occurred since the last release. One way to acquire this information is to scroll through the commit history of
 the project, and look for commits in which a pull request was merged.
 

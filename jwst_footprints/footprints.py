@@ -3,17 +3,20 @@
 
 """
 Created by Leonardo Ubeda on 14JUL2016
-reads tables produced by
-footprints_create_apertures-00.py
+Reads tables produced by footprints_create_apertures-00.py
 and then produces region files and displays them in DS9
 Based on work by Colin Cox and Wayne Kinzel
 Updated by Joseph Hunkeler 
+Maintained by Maria Peña Guerrero, Leonardo Ubeda, and Emily Wislowski
 
 
+Version History
 
-version history
-2.4      12MAR2018      changed from V3PA to aperture position angle
-                        help desk ticket INC0048565
+2.5      28JUN2021      resolved issue with NIRCam dither patterns (GitHub Issue #9)
+                        added files to meet the Tier 2 community software standards
+
+
+2.4      12MAR2018      changed from V3PA to aperture position angle (Help Desk INC0048565)
 
 2.3      01JAN2018      added NIRSpec fixed slit apertures
                         added NIRCam 8NIRSPEC dither pattern
@@ -28,7 +31,7 @@ version history
 1.2      26MAY2017      added hhmmss format for RA 
                         added ddmmss format for DEC
                         changed the naming convention of dither patterns to FULL3 FULL3TIGHT FULL6
-1.0      14JUL2016      first virsion
+1.0      14JUL2016      first version
 
 """
 
@@ -706,12 +709,12 @@ def footprints(inputfile,
             yr0 = yr
             ra0 = ra_long
             dec0 = dec_long
-            pa = theta_long+ 0.0265    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
+            pa =  (theta_long+ 0.0265)    #  12MAR2018  NRCALL_FULL_V2IdlYang = -0.0265
             myv2 = []
             myv3 = []
             #for shft in (0, 1, 2, 4, 5, 6, 7):
             for shft in range(len(shiftv2)):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
@@ -750,7 +753,7 @@ def footprints(inputfile,
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
@@ -787,7 +790,7 @@ def footprints(inputfile,
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
@@ -830,7 +833,7 @@ def footprints(inputfile,
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2, 3, 4, 5):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
@@ -894,7 +897,7 @@ def footprints(inputfile,
             myv2 = []
             myv3 = []
             for shft in range(len(shiftv2)):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 #print(v20, v30)
                 m = attitude(v20, v30, ra0, dec0, pa)
@@ -1042,7 +1045,7 @@ def footprints(inputfile,
             myv2 = []
             myv3 = []
             for shft in range(len(shiftv2)):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
@@ -1094,7 +1097,7 @@ def footprints(inputfile,
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
@@ -1144,7 +1147,7 @@ def footprints(inputfile,
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
@@ -1196,7 +1199,7 @@ def footprints(inputfile,
             myv2 = []
             myv3 = []
             for shft in (0, 1, 2, 3, 4, 5):
-                v20 = xr0 + (shiftv2[shft])  # here we shift
+                v20 = xr0 - (shiftv2[shft])  # here we shift
                 v30 = yr0 + (shiftv3[shft])  # here we shift
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
@@ -1266,7 +1269,7 @@ def footprints(inputfile,
             v3 = v3sh
             for shft in range(len(shiftv2)):
                 v20 = xr0 - (shiftv2[shft])  # here we shift
-                v30 = yr0 - (shiftv3[shft])  # here we shift
+                v30 = yr0 + (shiftv3[shft])  # here we shift
                 #print(v20, v30)
                 m = attitude(v20, v30, ra0, dec0, pa)
                 for k in range(len(v2)):
