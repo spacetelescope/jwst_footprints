@@ -4,6 +4,10 @@ on:
   push:
   pull_request:
 
+env:
+  # USE UTF8 ENCODING. SHOULD BE DEFAULT, BUT THIS IS INSURANCE AGAINST FUTURE CHANGES
+  PYTHONIOENCODING: UTF8
+
 jobs:
   build:
     name: build
@@ -15,8 +19,8 @@ jobs:
         shell: bash -l {0}
 
     steps:
-      - name: checkout code
-        uses: actions/checkout@v2
+    - name: checkout code
+      uses: actions/checkout@v2
 
     - name: install conda
       uses: conda-incubator/setup-miniconda@v2
@@ -24,7 +28,7 @@ jobs:
         auto-update-conda: true
         python-version: '3.7'
 
-      - name: run build
-        run: |
-          pip install -e .
-          python setup.py install
+    - name: run build
+      run: |
+        pip install -e .
+        python setup.py install
