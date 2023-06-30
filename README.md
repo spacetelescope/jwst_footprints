@@ -1,3 +1,8 @@
+# DEPRECATED
+
+This tool is now deprecated.  Please use the re-implemented tool available at:
+https://github.com/spacetelescope/jwst_novt
+
 # JWST NIRSpec Obersvation Visualization Tool (NOVT)
 
 ## Getting Started
